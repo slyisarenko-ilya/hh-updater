@@ -15,6 +15,6 @@ public class HHClient {
 		 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		 ResumeUpdater resumeUpdater = new ResumeUpdater();
 		 System.out.println("Update resume scheduler started");
-		// scheduler.scheduleAtFixedRate(resumeUpdater, 0, 5, TimeUnit.HOURS);
+		 scheduler.scheduleAtFixedRate(resumeUpdater, 0, 5, TimeUnit.HOURS);
 	}
 }

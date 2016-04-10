@@ -44,7 +44,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class ResumeUpdater 
-//implements Runnable
+implements Runnable
  {
 	private static final String CLIENT_ID = "G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU";
 	private static final String CLIENT_SECRET = "ORKJLA8JPF7T23D4FJALC7F4E7HU8S901H7MB07RNPE44V78OS4T42S40TMMI3DV";
@@ -340,18 +340,15 @@ public class ResumeUpdater
 		retrieveAuthorizationCodeAndUpdateResume();
 	}
 
-//	public void run() {
-//		try {
-//			System.out.println("Try update resume");
-//			updateResume();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-
-	public static void main(String[] args) throws Exception {
-		updateResume();
+	public void run() {
+		try {
+			System.out.println("Try update resume");
+			updateResume();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+
 
 }
