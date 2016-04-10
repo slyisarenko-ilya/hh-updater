@@ -38,7 +38,6 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -232,21 +231,31 @@ implements Runnable
 //			System.out.println(response);
 //			accessToken = response.getBody();
 
-
-        WebDriver driver = new FirefoxDriver();
+//  		DesiredCapabilities caps = new DesiredCapabilities();
+//  		caps.setJavascriptEnabled(true);  
+//  		caps.setCapability(
+//            PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
+//            "/usr/bin/phantomjs"
+//        );
+		System.out.println("Initialize web driver");
+        WebDriver driver = new  FirefoxDriver();
+//        WebDriver driver = new PhantomJSDriver(caps);
 
         // And now use this to visit Google
         driver.get(request.getLocationUri()); 		
+		System.out.println("Fill authorization form with web driver");
         
         WebElement userNameField = driver.findElement(By.ByName.name("username"));
         userNameField.sendKeys("slyisarenko-ilya@mail.ru");
         WebElement passwordField = driver.findElement(By.ByName.name("password"));
         passwordField.sendKeys("LT6h8kXH1234");
         WebElement sendButton = driver.findElement(By.ByCssSelector.cssSelector("input[type='submit']"));
-        sendButton.sendKeys(Keys.ENTER);
-
+		System.out.println("Submit authorization form with web driver");
+        sendButton.submit();
+		
+		System.out.println("Quit web driver");
 		driver.close(); //close selenium window
-		    		
+		driver.quit();
 	//		System.out.println(ToStringBuilder.reflectionToString(response, ToStringStyle.MULTI_LINE_STYLE));
 		} catch (OAuthSystemException e) {
 			// TODO Auto-generated catch block
