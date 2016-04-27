@@ -1,12 +1,20 @@
 package hh.resume_updater;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,13 +50,22 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class ResumeUpdater 
-implements Runnable
- {
-	private static final String CLIENT_ID = "G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU";
-	private static final String CLIENT_SECRET = "ORKJLA8JPF7T23D4FJALC7F4E7HU8S901H7MB07RNPE44V78OS4T42S40TMMI3DV";
+import hh.resume_updater.exception.CannotUpdateResumeException;
+import hh.resume_updater.exception.NoPropertiesException;
 
-	public static String fetchAccessToken(String code) throws OAuthProblemException {
+public class ResumeUpdater implements Runnable {
+	//private static final String CLIENT_ID = "G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU";
+	//private static final String CLIENT_SECRET = "ORKJLA8JPF7T23D4FJALC7F4E7HU8S901H7MB07RNPE44V78OS4T42S40TMMI3DV";
+	
+	private static final String propertiesPath = "./updater.properties";
+	private static final String TOKEN = "token";
+	private static final String CLIENT_SECRET = "client_secret";
+	private static final String CLIENT_ID = "client_id";
+	private static final String HEADHUNT_USERNAME = "username";
+	private static final String HEADHUNT_PASSWORD = "password";
+		
+	
+	public static String fetchAccessToken(String code) throws OAuthProblemException, NoPropertiesException {
 		String accessToken = null;
 		// System.out.println("Fetch access_token by authorization_code (" +
 		// code + ")");
@@ -63,13 +80,15 @@ implements Runnable
 		 * соответствующего заголовка Content-Type.
 		 * 
 		 */
+		String clientId = loadProperty(CLIENT_ID);
+		String clientSecret = loadProperty(CLIENT_SECRET);
 
 		// System.out.println("\n[STEP] Request Access Token");
 		OAuthClientRequest request = null;
 		try {
-
+			
 			request = OAuthClientRequest.tokenLocation("https://hh.ru/oauth/token/")
-					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(CLIENT_ID).setClientSecret(CLIENT_SECRET)
+					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(clientId).setClientSecret(clientSecret)
 					.setCode(code).buildBodyMessage();
 
 			Map<String, String> headers = new HashMap<String, String>();
@@ -84,7 +103,7 @@ implements Runnable
 			Map<String, Object> jsonMap = JSONUtils.parseJSON(jsonResponse.getBody());
 			if (jsonMap.containsKey("access_token")) {
 				accessToken = String.valueOf(jsonMap.get("access_token"));
-				// System.out.println(accessToken);
+				System.out.println("Access token: " + accessToken);
 			}
 			;
 
@@ -116,36 +135,31 @@ implements Runnable
 		return String.valueOf(html);
 	}
 
-	
+	private static void updateResume(String accessToken) throws CannotUpdateResumeException {
+		try {
+			String jsonResumes = get("/resumes/mine", accessToken);
 
-	private static void getTokenAndUpdateResume(String authorizationCode) throws OAuthProblemException, ClientProtocolException, IOException{
-	 String accessToken = fetchAccessToken(authorizationCode);
-		 String jsonResumes = get("/resumes/mine", accessToken);
-		// System.out.println(jsonResumes);
-		
-		 JSONObject resumes = new JSONObject(jsonResumes);
-		 JSONArray items = resumes.getJSONArray("items");
-		 if(items.length() > 0 ){
-		 JSONObject firstResume = items.getJSONObject(0);
-		 String resumeId = firstResume.getString("id");
-		 System.out.println("update resume date " + resumeId);
-		 //update resume
-		
-		 post("/resumes/" + resumeId + "/publish", accessToken);
-		// String putBody = "\"salary\": [{\"amount\": 1000000,\"currency\":
-//		 \"RUR\" }]";
-		// put("/resumes/" + resumeId, putBody, accessToken);
-		
-		 }
-		
+			JSONObject resumes = new JSONObject(jsonResumes);
+			JSONArray items = resumes.getJSONArray("items");
+			if (items.length() > 0) {
+				JSONObject firstResume = items.getJSONObject(0);
+				String resumeId = firstResume.getString("id");
+				System.out.println("Попытка обновления даты резюме с номером: " + resumeId);
+
+				// update resume
+				post("/resumes/" + resumeId + "/publish", accessToken);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new CannotUpdateResumeException("Исключение при получении\\обработке данных резюме", e);
+		}
 
 	}
 
 	@SuppressWarnings("finally")
-	public static void retrieveAuthorizationCodeAndUpdateResume() throws Exception {
+	public static void retrieveAuthorizationCodeAndUpdateResume(final HandleCodeCallback callback) throws CannotUpdateResumeException, NoPropertiesException {
 		// TODO Auto-generated method stub
 		final Server server = new Server(8090);
-		String accessToken = null;
 		try {
 			/*
 			 * Если пользователь не разрешает доступ приложению, мы
@@ -161,38 +175,43 @@ implements Runnable
 					if (target.contains("/code")) {
 						String code = baseRequest.getParameter("code");
 						if (code != null && !code.isEmpty()) {
-							System.out.println("handle " + target + ": " + code);
-						
+							System.out.println("Работаем с кодом: " + target + ": " + code);
+
 							response.setStatus(HttpServletResponse.SC_OK);
 							baseRequest.setHandled(true);
-							response.getWriter().append("Token successfully got. Now process resume");
+							response.getWriter().append("Токен успешно получен");
 						}
-						
+
+						System.out.println("Получаем токен и пытаемся обновить резюме");
 						try {
-						 	System.out.println("Get token and update resume");
-							getTokenAndUpdateResume(code);
-						} catch (OAuthProblemException e1) {
+							callback.run(code);
+						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						 try {
-						 	server.stop();
-						 	
-						 	System.out.println("Jetty server stopped");
-						 } catch (Exception e) {
-						 // TODO Auto-generated catch block
-						 	System.out.println("Jetty server stopped!");
-							//e.printStackTrace();
-						 }
-						 server.destroy();
+						try {
+							server.stop();
+
+							System.out.println("Jetty server stopped");
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+//							System.out.println("Error when stop Jetty server!");
+	//						e.printStackTrace();
+						}
+						server.destroy();
+
 					}
 					response.setContentType("text/html;charset=utf-8");
 				}
 			};
 
 			server.setHandler(h);
-
+			try{
 			server.start();
+			} catch(Exception e){
+				e.printStackTrace();
+				throw new CannotUpdateResumeException("Не удалось запустить сервер jetty", e);
+			}
 			System.out.println("Server started");
 			// server.join();
 
@@ -204,70 +223,48 @@ implements Runnable
 			 * прохождения авторизации на сайте, мы запрашиваем у пользователя
 			 * разрешение доступа приложения к его персональным данным.
 			 */
-//
-
-
+			//
+			
 			OAuthClientRequest request = OAuthClientRequest.authorizationLocation("https://hh.ru/oauth/authorize")
-					.setClientId(CLIENT_ID)
-					.setResponseType("code").buildQueryMessage();
+					.setClientId(loadProperty(CLIENT_ID)).setResponseType("code").buildQueryMessage();
 
-//			request.addHeader("Accept-Encoding", "gzip, deflate, br");
-//			request.addHeader("Content-Type", "text/html");
-//			request.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-//			request.addHeader("Accept-Language", "en-US,en;q=0.5");
-//			request.addHeader("Cookie", "hhtoken=_1iu_3NCZs6497YHgowsxAcJG6yy; hhuid=gRzscqtau6_FElbysoIx!Q--;");
-//			request.addHeader("Host", "hh.ru");
-//			request.addHeader("User-Agent",
-//					"Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:45.0) Gecko/20100101 Firefox/45.0");
-//			
-//			
-//			URLConnectionClient client = new URLConnectionClient();
-//
-//			OAuthClient oAuthClient = new OAuthClient(client);
-//						
-//			System.out.println("get response");
-//			OAuthResourceResponse response = (OAuthResourceResponse) oAuthClient.resource(request, "GET",
-//					OAuthResourceResponse.class);
-//			System.out.println(response);
-//			accessToken = response.getBody();
+			System.out.println("Эмулируем вход пользователя и получаем ACCESS_TOKEN");
+			WebDriver driver = new FirefoxDriver();
 
-//  		DesiredCapabilities caps = new DesiredCapabilities();
-//  		caps.setJavascriptEnabled(true);  
-//  		caps.setCapability(
-//            PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
-//            "/usr/bin/phantomjs"
-//        );
-		System.out.println("Initialize web driver");
-        WebDriver driver = new  FirefoxDriver();
-//        WebDriver driver = new PhantomJSDriver(caps);
+			driver.get(request.getLocationUri());
+			System.out.println("Заполняем форму авторизации hh.ru при помощи selenium");
 
-        // And now use this to visit Google
-        driver.get(request.getLocationUri()); 		
-		System.out.println("Fill authorization form with web driver");
-        
-        WebElement userNameField = driver.findElement(By.ByName.name("username"));
-        userNameField.sendKeys("slyisarenko-ilya@mail.ru");
-        WebElement passwordField = driver.findElement(By.ByName.name("password"));
-        passwordField.sendKeys("LT6h8kXH1234");
-        WebElement sendButton = driver.findElement(By.ByCssSelector.cssSelector("input[type='submit']"));
-		System.out.println("Submit authorization form with web driver");
-        sendButton.submit();
-		
-		System.out.println("Quit web driver");
-		driver.close(); //close selenium window
-		driver.quit();
-	//		System.out.println(ToStringBuilder.reflectionToString(response, ToStringStyle.MULTI_LINE_STYLE));
-		} catch (OAuthSystemException e) {
-			// TODO Auto-generated catch block
+			WebElement userNameField = driver.findElement(By.ByName.name("username"));
+			String userName = loadProperty(HEADHUNT_USERNAME);
+			userNameField.sendKeys(userName);
+			WebElement passwordField = driver.findElement(By.ByName.name("password"));
+			String password = loadProperty(HEADHUNT_PASSWORD);
+			passwordField.sendKeys(password);
+			WebElement sendButton = driver.findElement(By.ByCssSelector.cssSelector("input[type='submit']"));
+			sendButton.submit();
+
+			System.out.println("Останавливаем selenium");
+			driver.close(); // close selenium window
+			driver.quit();
+			// System.out.println(ToStringBuilder.reflectionToString(response,
+			// ToStringStyle.MULTI_LINE_STYLE));
+		}catch(NoPropertiesException npe){//
+			throw npe;
+		} catch(Exception e){
+			
 			e.printStackTrace();
+			throw new CannotUpdateResumeException("Не удалось запустить браузер selenium", e);
 		} finally {
 			if (server != null && server.isStarted()) {
 				try {
-				//	server.stop();
-				//	System.out.println("Server stopped " );
+					 server.stop();
+					 System.out.println("Сервер остановлен после ошибки. Удалите либо скорректируйте настроечный файл" );
+
 				} catch (final Exception e) {
 					e.printStackTrace();
+					throw new CannotUpdateResumeException("Проблемы с сервером jetty", e);
 				}
+  			    finalizeScheduler();	
 			}
 		}
 	}
@@ -304,6 +301,12 @@ implements Runnable
 		return entityContents;
 	}
 
+	private static  final Map<Integer, String> responseStatusMessages = new HashMap<Integer, String>(){{
+		put(new Integer(429), "Резюме ещё не готово обновиться. Можно раз в 4 часа");
+		put(new Integer(204), "Резюме обновлено!");
+	}};
+
+
 	public static void post(String command, String accessToken) throws ClientProtocolException, IOException {
 		HttpPost testRequest = new HttpPost("https://api.hh.ru" + command);
 		// testRequest.setHeader("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux
@@ -317,10 +320,13 @@ implements Runnable
 
 		// System.out.println(ToStringBuilder.reflectionToString(response.getAllHeaders(),
 		// ToStringStyle.MULTI_LINE_STYLE));
-		System.out
-				.println(ToStringBuilder.reflectionToString(response.getStatusLine(), ToStringStyle.MULTI_LINE_STYLE));
+		System.out.println("Про статусы ответа можете почитать здесь: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish");
+		System.out.println("Ответ сервера в сыром виде: " + ToStringBuilder.reflectionToString(response.getStatusLine(), ToStringStyle.MULTI_LINE_STYLE));
+		
+		System.out.println(responseStatusMessages.get(new Integer(response.getStatusLine().getStatusCode())));
 
 	}
+
 
 	public static void put(String command, String body, String accessToken)
 			throws ClientProtocolException, IOException {
@@ -344,20 +350,181 @@ implements Runnable
 	}
 
 
-	
-	public static void updateResume() throws Exception {
-		retrieveAuthorizationCodeAndUpdateResume();
-	}
 
-	public void run() {
+
+	public static void storeProperty(String key, String value) {
 		try {
-			System.out.println("Try update resume");
-			updateResume();
+			Properties props;
+			try{
+				props = getProps();
+			} catch(NoPropertiesException npe){
+				props = new Properties();
+			}
+			props.setProperty(key, value);
+			File f = new File(propertiesPath);
+			OutputStream out = new FileOutputStream(f);
+			props.store(out, "");
+			out.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	public static Properties getProps() throws NoPropertiesException{
+		// First try loading from the current directory
+		Properties props = new Properties();
+		InputStream is = null;
 
+		try {
+			File f = new File(propertiesPath);
+			is = new FileInputStream(f);
+		} catch (Exception e) {
+			is = null;
+		}
+		try{
+			if (is == null) {
+				// Try loading from classpath
+				is = props.getClass().getResourceAsStream(propertiesPath);
+			}
+	
+			// Try loading properties from the file (if found)
+			props.load(is);
+		}catch(IOException ioe){
+			throw new NoPropertiesException();
+		}catch(NullPointerException npe){
+			throw new NoPropertiesException();
+		}
+		return props;
+	}
+	
+	public static String loadProperty(String key) throws NoPropertiesException {
+		Properties props = getProps();
+		
+		String token = props.getProperty(key);
+		return token;
+
+	}
+	
+
+
+	public static void fullTokenUpdateProcess() throws Exception {
+
+		// token == null || token.isEmpty()
+
+		System.out.println("Try update resume");
+		retrieveAuthorizationCodeAndUpdateResume(new HandleCodeCallback() {
+			@Override
+			public void run(String code) throws Exception {
+				String accessToken = fetchAccessToken(code);
+				System.out.println("Сохраняем TOKEN в настройках. Его хватит на несколько недель. " + accessToken);
+				storeProperty(TOKEN, accessToken);
+				updateResume(accessToken);
+			}
+		});
+	}
+
+	public static void tryFullTokenUpdateProcess() throws CannotUpdateResumeException {
+		int count = 1;
+		int maxTries = 3;
+		boolean success = false;
+		while (!success) {
+			try {
+				fullTokenUpdateProcess();
+				success = true;
+			} catch (Exception e) {
+				System.out.println("try " + count + " of " + maxTries);
+				if (count++ > maxTries) {
+					throw new CannotUpdateResumeException("Не удалось обновить резюме", e);
+				}
+			}
+		} // end while
+	}
+
+
+	public void run() {
+
+		boolean updated = false; // флаг, означающий что обновление резюме
+									// прошло без ошибок
+		boolean propertiesExists = false;
+		boolean exit = false;
+		while(!propertiesExists && !exit){
+			try {
+	
+				String token = loadProperty(TOKEN);
+				propertiesExists = true;
+				try{
+					if (token != null && !token.isEmpty()) {
+						updateResume(token);
+						updated = true;
+					} else {
+						throw new CannotUpdateResumeException("Токен неверный, либо не получен");
+					}
+				} catch(CannotUpdateResumeException e){
+					System.out.println(e.getLocalizedMessage());
+				}
+				if(!updated){
+					tryFullTokenUpdateProcess();
+				}
+				if(updated){
+					System.out.println("Итерация обновления резюме завершена успешно");
+				}
+			} catch(NoPropertiesException npe){
+				propertiesExists = false;
+				try{
+					buildPropertiesInteractive();
+				} catch(IOException ioe){ // в случае такой ошибки - завершать процесс.
+					
+					System.out.println("Не получается сохранить параметры. Здесь уже врядли что-то поможет кроме разработчика.");
+					ioe.printStackTrace();
+					finalizeScheduler();	
+					exit = true;
+					
+				}
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				finalizeScheduler();	 
+	
+			}
+		} //end while
+	}
+
+	public void buildPropertiesInteractive() throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		System.out.println("CLIENT_ID и CLIENT_SECRET можно получить на https://dev.hh.ru/admin");
+        System.out.print("CLIENT_ID:>");
+        
+        String clientId = br.readLine();
+        System.out.print("CLIENT_SECRET:>");
+        String clientSecret = br.readLine();
+        System.out.print("Логин для авторизации в headhunt:>");
+        String userName = br.readLine();
+        System.out.print("Пароль headhunt:>");
+        String password = br.readLine();
+        
+        storeProperty(CLIENT_SECRET, clientSecret);
+        storeProperty(CLIENT_ID, clientId);
+        storeProperty(HEADHUNT_USERNAME, userName);
+        storeProperty(HEADHUNT_PASSWORD, password);
+        
+	}
+	
+	public static void finalizeScheduler(){
+		scheduler.shutdown();	
+		scheduler = null;	
+	}
+	
+	static ScheduledExecutorService  scheduler;
+	
+	public static void main(String[] args) throws Exception {
+
+		 scheduler = Executors.newScheduledThreadPool(1);
+		 ResumeUpdater resumeUpdater = new ResumeUpdater();
+		 System.out.println("Update resume scheduler started");
+		 scheduler.scheduleAtFixedRate(resumeUpdater, 0, 60, TimeUnit.MINUTES);
+	}
 
 }
