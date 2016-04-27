@@ -54,8 +54,6 @@ import hh.resume_updater.exception.CannotUpdateResumeException;
 import hh.resume_updater.exception.NoPropertiesException;
 //
 public class ResumeUpdater implements Runnable {
-	//private static final String CLIENT_ID = "G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU";
-	//private static final String CLIENT_SECRET = "ORKJLA8JPF7T23D4FJALC7F4E7HU8S901H7MB07RNPE44V78OS4T42S40TMMI3DV";
 	
 	private static final String propertiesPath = "./updater.properties";
 	private static final String TOKEN = "token";
@@ -67,8 +65,7 @@ public class ResumeUpdater implements Runnable {
 	
 	public static String fetchAccessToken(String code) throws OAuthProblemException, NoPropertiesException {
 		String accessToken = null;
-		// System.out.println("Fetch access_token by authorization_code (" +
-		// code + ")");
+
 
 		/*
 		 * Приложение делает сервер-сервер POST-запрос на
@@ -311,7 +308,7 @@ public class ResumeUpdater implements Runnable {
 		HttpPost testRequest = new HttpPost("https://api.hh.ru" + command);
 		// testRequest.setHeader("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux
 		// i686; rv:45.0) Gecko/20100101 Firefox/45.0");
-		testRequest.setHeader("User-Agent", "Resume updater/1.0 (slyisarenko-ilya@mail.ru)");
+		testRequest.setHeader("User-Agent", "Resume updater/1.0");
 		testRequest.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 		testRequest.setHeader("Authorization", "Bearer " + accessToken);
 
@@ -332,7 +329,7 @@ public class ResumeUpdater implements Runnable {
 			throws ClientProtocolException, IOException {
 
 		HttpPut testRequest = new HttpPut("https://api.hh.ru" + command);
-		testRequest.setHeader("User-Agent", "Resume updater/1.0 (slyisarenko-ilya@mail.ru)");
+		testRequest.setHeader("User-Agent", "Resume updater/1.0");
 		testRequest.setHeader("Authorization", "Bearer " + accessToken);
 		testRequest.setHeader("Content-Type", "applicatlion/json");
 
