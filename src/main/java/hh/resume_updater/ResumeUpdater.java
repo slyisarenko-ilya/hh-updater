@@ -52,7 +52,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import hh.resume_updater.exception.CannotUpdateResumeException;
 import hh.resume_updater.exception.NoPropertiesException;
-
+//
 public class ResumeUpdater implements Runnable {
 	//private static final String CLIENT_ID = "G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU";
 	//private static final String CLIENT_SECRET = "ORKJLA8JPF7T23D4FJALC7F4E7HU8S901H7MB07RNPE44V78OS4T42S40TMMI3DV";
