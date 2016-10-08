@@ -48,6 +48,7 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import hh.resume_updater.exception.CannotUpdateResumeException;
@@ -225,9 +226,11 @@ public class ResumeUpdater implements Runnable {
 			OAuthClientRequest request = OAuthClientRequest.authorizationLocation("https://hh.ru/oauth/authorize")
 					.setClientId(loadProperty(CLIENT_ID)).setResponseType("code").buildQueryMessage();
 
+			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver");
+			
 			System.out.println("Эмулируем вход пользователя и получаем ACCESS_TOKEN");
-			WebDriver driver = new FirefoxDriver();
-
+			WebDriver driver = new ChromeDriver();
+			System.out.println("driver location: " + request.getLocationUri());
 			driver.get(request.getLocationUri());
 			System.out.println("Заполняем форму авторизации hh.ru при помощи selenium");
 
