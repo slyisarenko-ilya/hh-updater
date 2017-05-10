@@ -18,18 +18,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
@@ -57,30 +51,30 @@ public class ResumeUpdater implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(ResumeUpdater.class);
 
-	private static final String propertiesPath = "./updater.properties";
 	private static final String TOKEN = "token";
 	private static final String CLIENT_SECRET = "client_secret";
 	private static final String CLIENT_ID = "client_id";
 	private static final String HEADHUNT_USERNAME = "username";
 	private static final String HEADHUNT_PASSWORD = "password";
-		
+	private static final int FETCH_TOKEN_TRIES_COUNT = 3;
+	private static String AUTH_LOCATION = "https://hh.ru/oauth/authorize";
 	
-	public static String fetchAccessToken(String code) throws OAuthProblemException, NoPropertiesException {
+
+	/**
+	 * Приложение делает сервер-сервер POST-запрос на
+	 * https://m.hh.ru/oauth/token для обмена полученного authorization_code
+	 * на access_token. В запросе необходимо передать:
+	 * grant_type=authorization_code&client_id={CLIENT_ID}&client_secret
+	 * ={CLIENT_SECRET}&code={CODE} Тело запроса необходимо передавать в
+	 * стандартном application/x-www-form-urlencoded с указанием
+	 * соответствующего заголовка Content-Type.
+	 * 
+	 */
+	public String fetchAccessToken(String code) throws OAuthProblemException, NoPropertiesException {
 		String accessToken = null;
 
-
-		/*
-		 * Приложение делает сервер-сервер POST-запрос на
-		 * https://m.hh.ru/oauth/token для обмена полученного authorization_code
-		 * на access_token. В запросе необходимо передать:
-		 * grant_type=authorization_code&client_id={CLIENT_ID}&client_secret
-		 * ={CLIENT_SECRET}&code={CODE} Тело запроса необходимо передавать в
-		 * стандартном application/x-www-form-urlencoded с указанием
-		 * соответствующего заголовка Content-Type.
-		 * 
-		 */
-		String clientId = loadProperty(CLIENT_ID);
-		String clientSecret = loadProperty(CLIENT_SECRET);
+		String clientId = PropertyUtils.loadProperty(CLIENT_ID);
+		String clientSecret = PropertyUtils.loadProperty(CLIENT_SECRET);
 
 		logger.debug("\n[STEP] Request Access Token");
 		OAuthClientRequest request = null;
@@ -107,13 +101,13 @@ public class ResumeUpdater implements Runnable {
 			;
 
 		} catch (OAuthSystemException e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getLocalizedMessage());
 		}
 		return accessToken;
 	}
+	
 
-	public static String getContent(HttpURLConnection con) throws IOException {
+	public String getContent(HttpURLConnection con) throws IOException {
 		InputStream inputStream = con.getInputStream();
 		StringBuffer html = null;
 		if (inputStream != null) {
@@ -134,30 +128,28 @@ public class ResumeUpdater implements Runnable {
 		return String.valueOf(html);
 	}
 
-	private static void updateResume(String accessToken) throws CannotUpdateException {
+	private void updateResume(String accessToken) throws CannotUpdateException {
 		try {
-			String jsonResumes = get("/resumes/mine", accessToken);
+			String jsonResumes = HttpUtils.get("/resumes/mine", accessToken);
 
 			JSONObject resumes = new JSONObject(jsonResumes);
 			JSONArray items = resumes.getJSONArray("items");
 			if (items.length() > 0) {
 				JSONObject firstResume = items.getJSONObject(0);
 				String resumeId = firstResume.getString("id");
-				logger.info("Попытка обновления даты резюме с номером: " + resumeId);
+				logger.info("Try update resume: " + resumeId);
 
 				// update resume
-				post("/resumes/" + resumeId + "/publish", accessToken);
+				HttpUtils.post("/resumes/" + resumeId + "/publish", accessToken);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new CannotUpdateException("Исключение при получении\\обработке данных резюме", e);
+			throw new CannotUpdateException("Exception when handle resume information", e);
 		}
-
 	}
 
-	@SuppressWarnings("finally")
-	public static void retrieveAuthorizationCodeAndUpdateResume(final CodeCallback callback) throws CannotUpdateException, NoPropertiesException {
-		// TODO Auto-generated method stub
+	
+	public  void retrieveAuthorizationCodeAndUpdateResume(final CodeCallback callback) throws CannotUpdateException, NoPropertiesException {
 		final Server server = new Server(8090);
 		try {
 			/*
@@ -165,7 +157,7 @@ public class ResumeUpdater implements Runnable {
 			 * перенаправляем пользователя на указанный redirect_uri с
 			 * ?error=access_denied и state={STATE}, если таковой был указан при
 			 * первом запросе. Иначе в редиректе мы указываем временный
-			 * authorization_code:
+			 * authorization_code: 
 			 */
 			Handler h = new AbstractHandler() {
 				public void handle(String target, Request baseRequest, HttpServletRequest request,
@@ -174,18 +166,17 @@ public class ResumeUpdater implements Runnable {
 					if (target.contains("/code")) {
 						String code = baseRequest.getParameter("code");
 						if (code != null && !code.isEmpty()) {
-							logger.info("Работаем с кодом: " + target + ": " + code);
+							logger.info("Work with code: " + target + ": " + code);
 
 							response.setStatus(HttpServletResponse.SC_OK);
 							baseRequest.setHandled(true);
-							response.getWriter().append("Токен успешно получен");
+							response.getWriter().append("Token fetched");
 						}
 
-						logger.info("Получаем токен и пытаемся обновить резюме");
+						logger.info("Get token and try update resume");
 						try {
 							callback.run(code);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						try {
@@ -205,207 +196,73 @@ public class ResumeUpdater implements Runnable {
 
 			server.setHandler(h);
 			try{
-			server.start();
+				server.start();
 			} catch(Exception e){
 				e.printStackTrace();
-				throw new CannotUpdateException("Не удалось запустить сервер jetty", e);
+				throw new CannotUpdateException("Cannot start server jetty", e);
 			}
 			logger.info("Server started");
-
-			/*
-			 * Приложение направляет пользователя по адресу:
-			 * https://m.hh.ru/oauth/authorize?response_type=code&client_id={
-			 * CLIENT_ID}&state={STATE}. Параметр state опционален, в случае его
-			 * указания, он будет включен в ответный редирект — После
-			 * прохождения авторизации на сайте, мы запрашиваем у пользователя
-			 * разрешение доступа приложения к его персональным данным.
-			 */
-			//
 			
-			OAuthClientRequest request = OAuthClientRequest.authorizationLocation("https://hh.ru/oauth/authorize")
-					.setClientId(loadProperty(CLIENT_ID)).setResponseType("code").buildQueryMessage();
-
-//в системе нужно установить chrome driver. если он не установлен глобально, то необходимо скачать и настроить путь к нему
-//			System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver");
+			authorizeWithSeleniumDriver();
 			
-			logger.info("Эмулируем вход пользователя и получаем ACCESS_TOKEN");
-			WebDriver driver = new ChromeDriver();
-			logger.info("driver location: " + request.getLocationUri());
-			driver.get(request.getLocationUri());
-			logger.info("Заполняем форму авторизации hh.ru при помощи selenium");
-
-			WebElement userNameField = driver.findElement(By.ByName.name("username"));
-			String userName = loadProperty(HEADHUNT_USERNAME);
-			userNameField.sendKeys(userName);
-			WebElement passwordField = driver.findElement(By.ByName.name("password"));
-			String password = loadProperty(HEADHUNT_PASSWORD);
-			passwordField.sendKeys(password);
-			WebElement sendButton = driver.findElement(By.ByCssSelector.cssSelector("input[type='submit']"));
-			sendButton.submit();
-
-			logger.info("Останавливаем selenium");
-			driver.close(); // close selenium window
-			driver.quit();
 		}catch(NoPropertiesException npe){//
 			throw npe;
 		} catch(Exception e){
-			
-			e.printStackTrace();
-			throw new CannotUpdateException("Не удалось запустить браузер selenium", e);
+			logger.error(e.getLocalizedMessage());
+			throw new CannotUpdateException("Cannot start selenium browser", e);
 		} finally {
 			if (server != null && server.isStarted()) {
 				try {
 					 server.stop();
-					 logger.error("Сервер остановлен после ошибки. Удалите либо скорректируйте настроечный файл" );
+					 logger.error("Server stopped after error. Try remove or correct properties file or investigate problem depeer" );
 
 				} catch (final Exception e) {
 					e.printStackTrace();
-					throw new CannotUpdateException("Проблемы с сервером jetty", e);
+					throw new CannotUpdateException("jetty problems", e);
 				}
   			    finalizeScheduler();	
 			}
 		}
 	}
 
-	public static void testAccessToken(String accessToken) throws ClientProtocolException, IOException {
-
-		HttpGet testRequest = new HttpGet("https://api.hh.ru/me");
-		testRequest.setHeader("User-Agent",
-				"Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:45.0) Gecko/20100101 Firefox/45.0");
-		testRequest.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		testRequest.setHeader("Authorization", "Bearer " + accessToken);
-
-		HttpClient httpClient = HttpClients.createDefault();
-		HttpResponse response = httpClient.execute(testRequest);
-
-		HttpEntity entity = response.getEntity();
-		// String entityContents = EntityUtils.toString(entity);
-
-	}
-
-	public static String get(String command, String accessToken) throws ClientProtocolException, IOException {
-		HttpGet testRequest = new HttpGet("https://api.hh.ru" + command);
-		testRequest.setHeader("User-Agent",
-				"Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:45.0) Gecko/20100101 Firefox/45.0");
-		testRequest.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		testRequest.setHeader("Authorization", "Bearer " + accessToken);
-
-		HttpClient httpClient = HttpClients.createDefault();
-		HttpResponse response = httpClient.execute(testRequest);
-
-		HttpEntity entity = response.getEntity();
-		String entityContents = EntityUtils.toString(entity);
-
-		return entityContents;
-	}
-
-	private static  final Map<Integer, String> responseStatusMessages = new HashMap<Integer, String>(){{
-		put(new Integer(429), "Резюме ещё не готово обновиться. Можно раз в 4 часа");
-		put(new Integer(204), "Резюме обновлено!");
-	}};
-
-
-	public static void post(String command, String accessToken) throws ClientProtocolException, IOException {
-		HttpPost testRequest = new HttpPost("https://api.hh.ru" + command);
-		// testRequest.setHeader("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux
-		// i686; rv:45.0) Gecko/20100101 Firefox/45.0");
-		testRequest.setHeader("User-Agent", "Resume updater/1.0");
-		testRequest.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		testRequest.setHeader("Authorization", "Bearer " + accessToken);
-
-		HttpClient httpClient = HttpClients.createDefault();
-		HttpResponse response = httpClient.execute(testRequest);
-
-		logger.info("Про статусы ответа можете почитать здесь: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish");
-		logger.info("Ответ сервера в сыром виде: " + ToStringBuilder.reflectionToString(response.getStatusLine(), ToStringStyle.MULTI_LINE_STYLE));
+	
+	/**
+	 * Приложение направляет пользователя по адресу:
+	 * https://m.hh.ru/oauth/authorize?response_type=code&client_id={
+	 * CLIENT_ID}&state={STATE}. Параметр state опционален, в случае его
+	 * указания, он будет включен в ответный редирект — После
+	 * прохождения авторизации на сайте, мы запрашиваем у пользователя
+	 * разрешение доступа приложения к его персональным данным.
+	 */
+	private void authorizeWithSeleniumDriver() throws OAuthSystemException, NoPropertiesException{
 		
-		logger.info(responseStatusMessages.get(new Integer(response.getStatusLine().getStatusCode())));
+		//в системе нужно установить chrome driver. если он не установлен глобально, то необходимо скачать и настроить путь к нему
+//		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver");
 
+		OAuthClientRequest request = OAuthClientRequest.authorizationLocation(AUTH_LOCATION)
+				.setClientId(PropertyUtils.loadProperty(CLIENT_ID)).setResponseType("code").buildQueryMessage();
+
+		logger.info("Emulate user login and fetch ACCESS_TOKEN");
+		WebDriver driver = new ChromeDriver();
+		logger.info("driver location: " + request.getLocationUri());
+		driver.get(request.getLocationUri());
+		logger.info("Fill authorization form at hh.ru with selenium");
+
+		WebElement userNameField = driver.findElement(By.ByName.name("username"));
+		String userName = PropertyUtils.loadProperty(HEADHUNT_USERNAME);
+		userNameField.sendKeys(userName);
+		WebElement passwordField = driver.findElement(By.ByName.name("password"));
+		String password = PropertyUtils.loadProperty(HEADHUNT_PASSWORD);
+		passwordField.sendKeys(password);
+		WebElement sendButton = driver.findElement(By.ByCssSelector.cssSelector("input[type='submit']"));
+		sendButton.submit();
+		logger.info("Stopping selenium...");
+		driver.close(); // close selenium window
+		driver.quit();
 	}
 
 
-	public static void put(String command, String body, String accessToken)
-			throws ClientProtocolException, IOException {
-
-		HttpPut testRequest = new HttpPut("https://api.hh.ru" + command);
-		testRequest.setHeader("User-Agent", "Resume updater/1.0");
-		testRequest.setHeader("Authorization", "Bearer " + accessToken);
-		testRequest.setHeader("Content-Type", "applicatlion/json");
-
-		HttpEntity entity = new ByteArrayEntity(body.getBytes("UTF-8"));
-		logger.info(ToStringBuilder.reflectionToString(entity, ToStringStyle.MULTI_LINE_STYLE));
-
-		testRequest.setEntity(entity);
-
-		HttpClient httpClient = HttpClients.createDefault();
-		HttpResponse response = httpClient.execute(testRequest);
-
-		entity = response.getEntity();
-		String entityContents = EntityUtils.toString(entity);
-		logger.info(entityContents);
-	}
-
-
-
-
-	public static void storeProperty(String key, String value) {
-		try {
-			Properties props;
-			try{
-				props = getProps();
-			} catch(NoPropertiesException npe){
-				props = new Properties();
-			}
-			props.setProperty(key, value);
-			File f = new File(propertiesPath);
-			OutputStream out = new FileOutputStream(f);
-			props.store(out, "");
-			out.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	
-	public static Properties getProps() throws NoPropertiesException{
-		// First try loading from the current directory
-		Properties props = new Properties();
-		InputStream is = null;
-
-		try {
-			File f = new File(propertiesPath);
-			is = new FileInputStream(f);
-		} catch (Exception e) {
-			is = null;
-		}
-		try{
-			if (is == null) {
-				// Try loading from classpath
-				is = props.getClass().getResourceAsStream(propertiesPath);
-			}
-	
-			// Try loading properties from the file (if found)
-			props.load(is);
-		}catch(IOException ioe){
-			throw new NoPropertiesException();
-		}catch(NullPointerException npe){
-			throw new NoPropertiesException();
-		}
-		return props;
-	}
-	
-	public static String loadProperty(String key) throws NoPropertiesException {
-		Properties props = getProps();
-		
-		String token = props.getProperty(key);
-		return token;
-
-	}
-	
-
-
-	public static void fullTokenUpdateProcess() throws Exception {
+	public  void fullTokenUpdateProcess() throws Exception {
 
 		// token == null || token.isEmpty()
 
@@ -414,24 +271,23 @@ public class ResumeUpdater implements Runnable {
 			@Override
 			public void run(String code) throws Exception {
 				String accessToken = fetchAccessToken(code);
-				logger.info("Сохраняем TOKEN в настройках. Его хватит на несколько недель. " + accessToken);
-				storeProperty(TOKEN, accessToken);
+				logger.info("Store TOKEN in properties. It expired at some weeks ago. " + accessToken);
+				PropertyUtils.storeProperty(TOKEN, accessToken);
 				updateResume(accessToken);
 			}
 		});
 	}
 
-	public static void tryFullTokenUpdateProcess() throws CannotUpdateException {
+	public  void tryFullTokenUpdateProcess() throws CannotUpdateException {
 		int count = 1;
-		int maxTries = 3;
 		boolean success = false;
 		while (!success) {
 			try {
 				fullTokenUpdateProcess();
 				success = true;
 			} catch (Exception e) {
-				logger.info("try " + count + " of " + maxTries);
-				if (count++ > maxTries) {
+				logger.info("try " + count + " of " + FETCH_TOKEN_TRIES_COUNT);
+				if (count++ > FETCH_TOKEN_TRIES_COUNT) {
 					throw new CannotUpdateException("Не удалось обновить резюме", e);
 				}
 			}
@@ -448,7 +304,7 @@ public class ResumeUpdater implements Runnable {
 		while(!propertiesExists && !exit){
 			try {
 	
-				String token = loadProperty(TOKEN);
+				String token = PropertyUtils.loadProperty(TOKEN);
 				propertiesExists = true;
 				try{
 					if (token != null && !token.isEmpty()) {
@@ -501,10 +357,10 @@ public class ResumeUpdater implements Runnable {
         System.out.print("Пароль headhunt:>");
         String password = br.readLine();
         
-        storeProperty(CLIENT_SECRET, clientSecret);
-        storeProperty(CLIENT_ID, clientId);
-        storeProperty(HEADHUNT_USERNAME, userName);
-        storeProperty(HEADHUNT_PASSWORD, password);
+        PropertyUtils.storeProperty(CLIENT_SECRET, clientSecret);
+        PropertyUtils.storeProperty(CLIENT_ID, clientId);
+        PropertyUtils.storeProperty(HEADHUNT_USERNAME, userName);
+        PropertyUtils.storeProperty(HEADHUNT_PASSWORD, password);
         
 	}
 	
@@ -513,7 +369,7 @@ public class ResumeUpdater implements Runnable {
 //		scheduler = null;	
 	}
 	
-	static ScheduledExecutorService  scheduler;
+	ScheduledExecutorService  scheduler;
 	
 	public static void main(String[] args) throws Exception {
 
