@@ -20,17 +20,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpUtils {
-	
-    private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
-	private  final Map<Integer, String> responseStatusMessages = new HashMap<Integer, String>(){
+	private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
+
+	private static final Map<Integer, String> responseStatusMessages = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -2254679450533136837L;
-	{
-		put(new Integer(429), "You can update resume once per 4 hours");
-		put(new Integer(204), "Resume updated!");
-	}};
+		{
+			put(new Integer(429), "You can update resume once per 4 hours");
+			put(new Integer(204), "Resume updated!");
+		}
+	};
 
-	
 	public static String get(String command, String accessToken) throws ClientProtocolException, IOException {
 		HttpGet testRequest = new HttpGet("https://api.hh.ru" + command);
 		testRequest.setHeader("User-Agent",
@@ -46,7 +46,7 @@ public class HttpUtils {
 
 		return entityContents;
 	}
-	
+
 	public static void put(String command, String body, String accessToken)
 			throws ClientProtocolException, IOException {
 
@@ -67,7 +67,7 @@ public class HttpUtils {
 		String entityContents = EntityUtils.toString(entity);
 		logger.info(entityContents);
 	}
-	
+
 	public static void post(String command, String accessToken) throws ClientProtocolException, IOException {
 		HttpPost testRequest = new HttpPost("https://api.hh.ru" + command);
 		// testRequest.setHeader("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux
@@ -79,9 +79,11 @@ public class HttpUtils {
 		HttpClient httpClient = HttpClients.createDefault();
 		HttpResponse response = httpClient.execute(testRequest);
 
-		logger.info("About statuses you can read here: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish");
-		logger.info("Ответ сервера в сыром виде: " + ToStringBuilder.reflectionToString(response.getStatusLine(), ToStringStyle.MULTI_LINE_STYLE));
-		
+		logger.info(
+				"About statuses you can read here: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish");
+		logger.info("Ответ сервера в сыром виде: "
+				+ ToStringBuilder.reflectionToString(response.getStatusLine(), ToStringStyle.MULTI_LINE_STYLE));
+
 		logger.info(responseStatusMessages.get(new Integer(response.getStatusLine().getStatusCode())));
 
 	}
