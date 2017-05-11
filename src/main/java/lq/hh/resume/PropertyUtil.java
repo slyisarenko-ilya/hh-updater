@@ -10,7 +10,7 @@ import java.util.Properties;
 
 import lq.hh.exception.NoPropertiesException;
 
-public class PropertyUtils {
+public class PropertyUtil {
 	
 	private static final String propertiesPath = "./updater.properties";
 
@@ -51,7 +51,7 @@ public class PropertyUtils {
 		try {
 			Properties props;
 			try{
-				props = PropertyUtils.getProps();
+				props = PropertyUtil.getProps();
 			} catch(NoPropertiesException npe){
 				props = new Properties();
 			}

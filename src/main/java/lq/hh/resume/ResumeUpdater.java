@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,12 +34,13 @@ import org.slf4j.LoggerFactory;
 
 import lq.hh.exception.CannotUpdateException;
 import lq.hh.exception.NoPropertiesException;
-import lq.hh.resume.HttpUtils;
 //
 public class ResumeUpdater implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(ResumeUpdater.class);
 
+    private static final Integer JETTY_PORT = 8090;
+    
 	private static final String TOKEN = "token";
 	private static final String CLIENT_SECRET = "client_secret";
 	private static final String CLIENT_ID = "client_id";
@@ -63,8 +63,8 @@ public class ResumeUpdater implements Runnable {
 	public String fetchAccessToken(String code) throws OAuthProblemException, NoPropertiesException {
 		String accessToken = null;
 
-		String clientId = PropertyUtils.loadProperty(CLIENT_ID);
-		String clientSecret = PropertyUtils.loadProperty(CLIENT_SECRET);
+		String clientId = PropertyUtil.loadProperty(CLIENT_ID);
+		String clientSecret = PropertyUtil.loadProperty(CLIENT_SECRET);
 
 		logger.debug("\n[STEP] Request Access Token");
 		OAuthClientRequest request = null;
@@ -118,9 +118,14 @@ public class ResumeUpdater implements Runnable {
 		return String.valueOf(html);
 	}
 
+	/**
+	 * Использует полученный токен для обновления резюме посредством API hh.ru 
+	 * @param accessToken
+	 * @throws CannotUpdateException
+	 */
 	private void updateResume(String accessToken) throws CannotUpdateException {
 		try {
-			String jsonResumes = HttpUtils.get("/resumes/mine", accessToken);
+			String jsonResumes = HttpUtil.get("/resumes/mine", accessToken);
 
 			JSONObject resumes = new JSONObject(jsonResumes);
 			JSONArray items = resumes.getJSONArray("items");
@@ -130,7 +135,7 @@ public class ResumeUpdater implements Runnable {
 				logger.info("Try update resume: " + resumeId);
 
 				// update resume
-				HttpUtils.post("/resumes/" + resumeId + "/publish", accessToken);
+				HttpUtil.post("/resumes/" + resumeId + "/publish", accessToken);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,78 +144,86 @@ public class ResumeUpdater implements Runnable {
 	}
  
 	
-	public  void retrieveAuthorizationCodeAndUpdateResume(final CodeCallback callback) throws CannotUpdateException, NoPropertiesException {
-		final Server server = new Server(8090);
-		try {
-			/*
-			 * Если пользователь не разрешает доступ приложению, мы
-			 * перенаправляем пользователя на указанный redirect_uri с
-			 * ?error=access_denied и state={STATE}, если таковой был указан при
-			 * первом запросе. Иначе в редиректе мы указываем временный
-			 * authorization_code: 
-			 */
-			Handler h = new AbstractHandler() {
-				public void handle(String target, Request baseRequest, HttpServletRequest request,
-						HttpServletResponse response) throws IOException, ServletException {
-					response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-					if (target.contains("/code")) {
-						String code = baseRequest.getParameter("code");
-						if (code != null && !code.isEmpty()) {
-							logger.info("Work with code: " + target + ": " + code);
+	private Server startCatchServer(final CodeCallback callback) throws CannotUpdateException{
+		
+		final Server hhResponseCatcher = new Server(JETTY_PORT);
+		/*
+		 * Если пользователь не разрешает доступ приложению, мы
+		 * перенаправляем пользователя на указанный redirect_uri с
+		 * ?error=access_denied и state={STATE}, если таковой был указан при
+		 * первом запросе. Иначе в редиректе мы указываем временный
+		 * authorization_code: 
+		 */
+		Handler callbackHandler = new AbstractHandler() {
+			
+			public void handle(String target, Request baseRequest, HttpServletRequest request,
+					HttpServletResponse response) throws IOException, ServletException {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+				if (target.contains("/code")) {
+					String code = baseRequest.getParameter("code");
+					if (code != null && !code.isEmpty()) {
+						logger.info("Work with code: " + target + ": " + code);
 
-							response.setStatus(HttpServletResponse.SC_OK);
-							baseRequest.setHandled(true);
-							response.getWriter().append("Token fetched");
-						}
-
-						logger.info("Get token and try update resume");
-						try {
-							callback.run(code);
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-						try {
-							server.stop();
-
-							logger.info("Jetty server stopped");
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							logger.error("Error when stop Jetty server!" + e.getLocalizedMessage());
-						}
-						server.destroy();
-
+						response.setStatus(HttpServletResponse.SC_OK);
+						baseRequest.setHandled(true);
+						response.getWriter().append("Token fetched");
 					}
-					response.setContentType("text/html;charset=utf-8");
-				}
-			};
 
-			server.setHandler(h);
-			try{
-				server.start();
-			} catch(Exception e){
-				e.printStackTrace();
-				throw new CannotUpdateException("Cannot start server jetty", e);
+					logger.info("Get token and try update resume");
+					try {
+						callback.run(code);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					try {
+						hhResponseCatcher.stop();
+
+						logger.info("Jetty server stopped");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						logger.error("Error when stop Jetty server!" + e.getLocalizedMessage());
+					}
+					hhResponseCatcher.destroy();
+
+				}
+				response.setContentType("text/html;charset=utf-8");
 			}
-			logger.info("Server started");
-			
+		};
+
+		hhResponseCatcher.setHandler(callbackHandler);
+		try{
+			hhResponseCatcher.start();
+		} catch(Exception e){
+			e.printStackTrace();
+			throw new CannotUpdateException("Cannot start server jetty", e);
+		}
+		logger.info("Server started");
+		
+		return hhResponseCatcher;
+	}
+	
+	
+	public  void retrieveAuthorizationCodeAndUpdateResume(final CodeCallback callback) throws CannotUpdateException, NoPropertiesException {
+		//jetty сервер ловит ответы от hh.ru, анализирует переданный код
+		//и выполняет необходимые действия по авторизации
+		Server hhResponseCatcher = null;
+		try{
+			hhResponseCatcher = startCatchServer(callback);
 			authorizeWithSeleniumDriver();
-			
 		}catch(NoPropertiesException npe){//
 			throw npe;
 		} catch(Exception e){
 			logger.error(e.getLocalizedMessage());
 			throw new CannotUpdateException("Cannot start selenium browser", e);
 		} finally {
-			if (server != null && server.isStarted()) {
+			if (hhResponseCatcher != null && hhResponseCatcher.isStarted()) {
 				try {
-					 server.stop();
+					 hhResponseCatcher.stop();
 					 logger.error("Server stopped after error. Try remove or correct properties file or investigate problem depeer" );
-
 				} catch (final Exception e) {
 					e.printStackTrace();
 					throw new CannotUpdateException("jetty problems", e);
 				}
-  			    finalizeScheduler();	
 			}
 		}
 	}
@@ -227,10 +240,10 @@ public class ResumeUpdater implements Runnable {
 	private void authorizeWithSeleniumDriver() throws OAuthSystemException, NoPropertiesException{
 		
 		//в системе нужно установить chrome driver. если он не установлен глобально, то необходимо скачать и настроить путь к нему
-//		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver");
+		//System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver");
 
 		OAuthClientRequest request = OAuthClientRequest.authorizationLocation(AUTH_LOCATION)
-				.setClientId(PropertyUtils.loadProperty(CLIENT_ID)).setResponseType("code").buildQueryMessage();
+				.setClientId(PropertyUtil.loadProperty(CLIENT_ID)).setResponseType("code").buildQueryMessage();
 
 		logger.info("Emulate user login and fetch ACCESS_TOKEN");
 		WebDriver driver = new ChromeDriver();
@@ -239,10 +252,10 @@ public class ResumeUpdater implements Runnable {
 		logger.info("Fill authorization form at hh.ru with selenium");
 
 		WebElement userNameField = driver.findElement(By.ByName.name("username"));
-		String userName = PropertyUtils.loadProperty(HEADHUNT_USERNAME);
+		String userName = PropertyUtil.loadProperty(HEADHUNT_USERNAME);
 		userNameField.sendKeys(userName);
 		WebElement passwordField = driver.findElement(By.ByName.name("password"));
-		String password = PropertyUtils.loadProperty(HEADHUNT_PASSWORD);
+		String password = PropertyUtil.loadProperty(HEADHUNT_PASSWORD);
 		passwordField.sendKeys(password);
 		WebElement sendButton = driver.findElement(By.ByCssSelector.cssSelector("input[type='submit']"));
 		sendButton.submit();
@@ -253,21 +266,24 @@ public class ResumeUpdater implements Runnable {
 
 
 	public  void fullTokenUpdateProcess() throws Exception {
-
-		// token == null || token.isEmpty()
-
 		logger.info("Try update resume");
 		retrieveAuthorizationCodeAndUpdateResume(new CodeCallback() {
 			@Override
 			public void run(String code) throws Exception {
 				String accessToken = fetchAccessToken(code);
 				logger.info("Store TOKEN in properties. It expired at some weeks ago. " + accessToken);
-				PropertyUtils.storeProperty(TOKEN, accessToken);
+				PropertyUtil.storeProperty(TOKEN, accessToken);
 				updateResume(accessToken);
 			}
 		});
 	}
 
+	
+	/**
+	 * Несколько раз пытается обновить токен. 
+	 * В случае неудачи выбрасывает исключение.
+	 * @throws CannotUpdateException
+	 */
 	public  void tryFullTokenUpdateProcess() throws CannotUpdateException {
 		int count = 1;
 		boolean success = false;
@@ -287,14 +303,14 @@ public class ResumeUpdater implements Runnable {
 
 	public void run() {
 
-		boolean updated = false; // флаг, означающий что обновление резюме
-									// прошло без ошибок
+		boolean updated = false; // флаг, означающий факт успешного обновления резюме
+									
 		boolean propertiesExists = false;
 		boolean exit = false;
 		while(!propertiesExists && !exit){
 			try {
 	
-				String token = PropertyUtils.loadProperty(TOKEN);
+				String token = PropertyUtil.loadProperty(TOKEN);
 				propertiesExists = true;
 				try{
 					if (token != null && !token.isEmpty()) {
@@ -320,19 +336,16 @@ public class ResumeUpdater implements Runnable {
 					
 					logger.error("Не получается сохранить параметры. Здесь уже врядли что-то поможет кроме разработчика.");
 					ioe.printStackTrace();
-					finalizeScheduler();	
 					exit = true;
 					
 				}
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				finalizeScheduler();	 
-	
+				logger.error(e1.getLocalizedMessage());
 			}
 		} //end while
 	}
 
+	
 	public void buildPropertiesInteractive() throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
@@ -347,28 +360,14 @@ public class ResumeUpdater implements Runnable {
         System.out.print("Пароль headhunt:>");
         String password = br.readLine();
         
-        PropertyUtils.storeProperty(CLIENT_SECRET, clientSecret);
-        PropertyUtils.storeProperty(CLIENT_ID, clientId);
-        PropertyUtils.storeProperty(HEADHUNT_USERNAME, userName);
-        PropertyUtils.storeProperty(HEADHUNT_PASSWORD, password);
-        
+        PropertyUtil.storeProperty(CLIENT_SECRET, clientSecret);
+        PropertyUtil.storeProperty(CLIENT_ID, clientId);
+        PropertyUtil.storeProperty(HEADHUNT_USERNAME, userName);
+        PropertyUtil.storeProperty(HEADHUNT_PASSWORD, password);
 	}
-	
-	public static void finalizeScheduler(){
-//		scheduler.shutdown();	
-//		scheduler = null;	
-	}
-	
-	ScheduledExecutorService  scheduler;
 	
 	public static void main(String[] args) throws Exception {
-
 		 (new ResumeUpdater()).run();
-
-//		 scheduler = Executors.newScheduledThreadPool(1);
-//		 ResumeUpdater resumeUpdater = new ResumeUpdater();
-//		 System.out.println("Update resume scheduler started");
-//		 scheduler.scheduleAtFixedRate(resumeUpdater, 0, 60, TimeUnit.MINUTES);
 	}
 
 }

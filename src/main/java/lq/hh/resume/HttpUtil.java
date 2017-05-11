@@ -19,9 +19,9 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HttpUtils {
+public class HttpUtil {
 
-	private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
 	private static final Map<Integer, String> responseStatusMessages = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -2254679450533136837L;
