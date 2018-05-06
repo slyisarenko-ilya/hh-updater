@@ -25,6 +25,11 @@ mvn clean compile assembly:single
 Файл с настройками создаётся в домашнем каталоге текущего пользователя.
 
 
- 
+# Для запуска из среды Eclipse
+нужно в Vm Arguments добавить системное свойство webdriver.chrome.driver, 
+предварительно скачав версию драйвера с http://chromedriver.storage.googleapis.com/index.html
+
+Также можно включить assertions параметром -ea в Vm Arguments. 
+Тогда при запуске будет проверяться наличие системного свойства webdriver.chrome.driver
 
 
