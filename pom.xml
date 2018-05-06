@@ -182,7 +182,7 @@
       <configuration>
         <archive>
           <manifest>
-            <mainClass>hh.resume_updater.ResumeUpdater</mainClass>
+            <mainClass>lq.hh.resume.ResumeUpdater</mainClass>
           </manifest>
         </archive>
         <descriptorRefs>

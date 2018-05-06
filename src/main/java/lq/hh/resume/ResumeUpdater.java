@@ -32,6 +32,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import junit.framework.Assert;
 import lq.hh.exception.CannotUpdateException;
 import lq.hh.exception.NoPropertiesException;
 //
@@ -367,7 +368,12 @@ public class ResumeUpdater implements Runnable {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		 (new ResumeUpdater()).run();
+		testSystemPropertiesAvailability();
+		(new ResumeUpdater()).run();
 	}
-
+	
+	private static void testSystemPropertiesAvailability() {
+        System.out.println(System.getProperty("webdriver.chrome.driver"));
+        assert System.getProperty("webdriver.chrome.driver") != null;
+	}
 }
