@@ -25,7 +25,11 @@ mvn clean compile assembly:single
 Файл с настройками создаётся в домашнем каталоге текущего пользователя.
 
 
+<<<<<<< HEAD
 # Для запуска из среды Eclipse
+=======
+#Для запуска из среды Eclipse
+>>>>>>> branch 'master' of https://github.com/slyisarenko-ilya/hh-updater.git
 нужно в Vm Arguments добавить системное свойство webdriver.chrome.driver, 
 предварительно скачав версию драйвера с http://chromedriver.storage.googleapis.com/index.html
 
