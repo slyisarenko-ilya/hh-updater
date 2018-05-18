@@ -372,7 +372,7 @@ public class ResumeUpdater implements Runnable {
 	}
 	
 	private static void testSystemPropertiesAvailability() {
-        System.out.println(System.getProperty("webdriver.chrome.driver"));
+        logger.debug(System.getProperty("webdriver.chrome.driver"));
         assert System.getProperty("webdriver.chrome.driver") != null;
 	}
 }
