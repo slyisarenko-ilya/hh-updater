@@ -14,6 +14,12 @@ public class PropertiesService {
 	
 	private static final String propertiesPath = "./updater.properties";
 
+	public static final String CLIENT_SECRET = "client_secret";
+	public static final String CLIENT_ID = "client_id";
+	public static final String HEADHUNT_USERNAME = "username";
+	public static final String HEADHUNT_PASSWORD = "password";
+	
+	
 	public  static Properties getProps() throws NoPropertiesException{
 		// First try loading from the current directory
 		Properties props = new Properties();
@@ -33,9 +39,9 @@ public class PropertiesService {
 			// Try loading properties from the file (if found)
 			props.load(is);
 		}catch(IOException ioe){
-			throw new NoPropertiesException();
+			throw new NoPropertiesException(ioe);
 		}catch(NullPointerException npe){
-			throw new NoPropertiesException();
+			throw new NoPropertiesException(npe);
 		}
 		return props;
 	}

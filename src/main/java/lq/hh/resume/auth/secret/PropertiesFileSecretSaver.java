@@ -1,7 +1,7 @@
 package lq.hh.resume.auth.secret;
 
-import lq.hh.resume.PropertiesService;
 import lq.hh.resume.auth.ClientIdentity;
+import lq.hh.resume.services.PropertiesService;
 
 public class PropertiesFileSecretSaver implements SecretSaver {
 

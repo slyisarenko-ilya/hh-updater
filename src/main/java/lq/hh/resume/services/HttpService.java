@@ -1,4 +1,4 @@
-package lq.hh.resume;
+package lq.hh.resume.services;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,9 +19,9 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HttpUtil {
+public class HttpService {
 
-	private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(HttpService.class);
 
 	private static final Map<Integer, String> responseStatusMessages = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -2254679450533136837L;

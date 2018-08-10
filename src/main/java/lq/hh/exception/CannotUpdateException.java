@@ -1,6 +1,6 @@
 package lq.hh.exception;
 
-public class CannotUpdateException extends Exception {
+public class CannotUpdateException extends RuntimeException {
 
 	private static final long serialVersionUID = 7712193792875366608L;
 
@@ -12,4 +12,7 @@ public class CannotUpdateException extends Exception {
 		super(s);
 	}
 
+	public CannotUpdateException(Throwable t){
+		super(t);
+	}
 }
