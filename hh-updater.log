@@ -1,0 +1,483 @@
+Try update resume: 75c5254bff002124540039ed1f736563726574
+About statuses you can read here: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish
+Ответ сервера в сыром виде: org.apache.http.message.BasicStatusLine@70e8f8e[
+  protoVersion=HTTP/1.1
+  statusCode=429
+  reasonPhrase=Too Many Requests
+]
+You can update resume once per 4 hours
+Итерация обновления резюме завершена успешно
+2018-05-18 19:42:39,0672018-05-18 19:42:39,2662018-05-18 19:42:39,2882018-05-18 19:42:39,2882018-05-18 19:42:39,2882018-05-18 19:42:56,471
+2018-05-18 19:42:56,673
+2018-05-18 19:42:56,697
+2018-05-18 19:42:56,697
+2018-05-18 19:42:56,697
+2018-05-18 19:43:12,775 - Try update resume: 75c5254bff002124540039ed1f736563726574
+2018-05-18 19:43:12,995 - About statuses you can read here: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish
+2018-05-18 19:43:13,017 - Ответ сервера в сыром виде: org.apache.http.message.BasicStatusLine@6e4784bc[
+  protoVersion=HTTP/1.1
+  statusCode=429
+  reasonPhrase=Too Many Requests
+]
+2018-05-18 19:43:13,018 - You can update resume once per 4 hours
+2018-05-18 19:43:13,018 - Итерация обновления резюме завершена успешно
+2018-08-11 00:28:26,943 - Exception when handle resume information
+2018-08-11 00:28:26,945 - Try update resume
+2018-08-11 00:28:26,992 - Logging initialized @781ms
+2018-08-11 00:28:27,068 - jetty-9.3.9.M0
+2018-08-11 00:28:27,121 - Started ServerConnector@3e788324{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:28:27,122 - Started @915ms
+2018-08-11 00:28:27,122 - Server started
+2018-08-11 00:28:27,125 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:28:28,608 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:28:30,782 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:28:30,834 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 41 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.0A4W7H}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 560c5777a466490abb405c9a97927c7e
+*** Element info: {Using=name, value=username}
+2018-08-11 00:28:30,837 - Stopped ServerConnector@3e788324{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:28:30,839 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:28:30,839 - try 1 of 3
+2018-08-11 00:28:30,839 - Try update resume
+2018-08-11 00:28:30,839 - jetty-9.3.9.M0
+2018-08-11 00:28:30,843 - Started ServerConnector@75d3a5e0{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:28:30,843 - Started @4636ms
+2018-08-11 00:28:30,843 - Server started
+2018-08-11 00:28:30,843 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:28:31,357 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:28:32,946 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:28:32,951 - no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 5 milliseconds
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.B6WxPh}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 0d835902386ba097a89499d8606443cf
+*** Element info: {Using=name, value=username}
+2018-08-11 00:28:32,952 - Stopped ServerConnector@75d3a5e0{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:28:32,954 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:28:32,954 - try 2 of 3
+2018-08-11 00:28:32,954 - Try update resume
+2018-08-11 00:28:32,954 - jetty-9.3.9.M0
+2018-08-11 00:28:32,965 - Started ServerConnector@cb0755b{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:28:32,965 - Started @6759ms
+2018-08-11 00:28:32,966 - Server started
+2018-08-11 00:28:32,966 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:28:33,626 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:29:04,622 - Exception when handle resume information
+2018-08-11 00:29:04,623 - Try update resume
+2018-08-11 00:29:04,662 - Logging initialized @791ms
+2018-08-11 00:29:04,694 - jetty-9.3.9.M0
+2018-08-11 00:29:04,716 - Started ServerConnector@5c150aa5{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:29:04,716 - Started @848ms
+2018-08-11 00:29:04,716 - Server started
+2018-08-11 00:29:04,719 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:29:05,393 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:29:07,745 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:29:07,787 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 29 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.fKMwNj}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: f98ce9f722a955a58dc35af7372d1eca
+*** Element info: {Using=name, value=username}
+2018-08-11 00:29:07,792 - Stopped ServerConnector@5c150aa5{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:29:07,795 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:29:07,796 - try 1 of 3
+2018-08-11 00:29:07,796 - Try update resume
+2018-08-11 00:29:07,796 - jetty-9.3.9.M0
+2018-08-11 00:29:07,811 - Started ServerConnector@75d3a5e0{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:29:07,811 - Started @3943ms
+2018-08-11 00:29:07,811 - Server started
+2018-08-11 00:29:07,812 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:29:08,411 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:29:10,619 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:29:10,655 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 34 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.T8EAUo}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: e7084f2b4d361afd70bacfafef7b8ff9
+*** Element info: {Using=name, value=username}
+2018-08-11 00:29:10,655 - Stopped ServerConnector@75d3a5e0{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:29:10,656 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:29:10,657 - try 2 of 3
+2018-08-11 00:29:10,657 - Try update resume
+2018-08-11 00:29:10,657 - jetty-9.3.9.M0
+2018-08-11 00:29:10,658 - Started ServerConnector@4b013c76{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:29:10,658 - Started @6790ms
+2018-08-11 00:29:10,658 - Server started
+2018-08-11 00:29:10,658 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:29:11,312 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:29:12,311 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:29:12,365 - chrome not reachable
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 54 milliseconds
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.Inogwq}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 97e32d2c1d47bad7db3b30c186749a4a
+*** Element info: {Using=name, value=username}
+2018-08-11 00:29:12,371 - Stopped ServerConnector@4b013c76{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:29:12,372 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:29:12,373 - try 3 of 3
+2018-08-11 00:29:12,375 - Try update resume
+2018-08-11 00:29:12,376 - jetty-9.3.9.M0
+2018-08-11 00:29:12,416 - Started ServerConnector@15043a2f{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:29:12,416 - Started @8548ms
+2018-08-11 00:29:12,416 - Server started
+2018-08-11 00:29:12,417 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:29:13,030 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:29:13,747 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:29:13,769 - no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 18 milliseconds
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.1NE0yd}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 9ea93e94fb5cadfd65a5fe47f6d78798
+*** Element info: {Using=name, value=username}
+2018-08-11 00:29:13,773 - Stopped ServerConnector@15043a2f{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:29:13,774 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:29:13,774 - try 4 of 3
+2018-08-11 00:29:13,774 - Не удалось обновить резюме
+2018-08-11 00:31:26,682 - Exception when handle resume information
+2018-08-11 00:31:26,683 - Try update resume
+2018-08-11 00:31:26,724 - Logging initialized @707ms
+2018-08-11 00:31:26,766 - jetty-9.3.9.M0
+2018-08-11 00:31:26,785 - Started ServerConnector@3d51f06e{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:31:26,785 - Started @771ms
+2018-08-11 00:31:26,785 - Server started
+2018-08-11 00:31:26,788 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:31:27,395 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:31:29,380 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:31:29,388 - no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 4 milliseconds
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.pQYM1E}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: cc5199c3fdae59e1e965532eed127731
+*** Element info: {Using=name, value=username}
+2018-08-11 00:31:29,392 - Stopped ServerConnector@3d51f06e{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:31:29,397 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:31:29,397 - try 1 of 3
+2018-08-11 00:31:29,397 - Try update resume
+2018-08-11 00:31:29,398 - jetty-9.3.9.M0
+2018-08-11 00:31:29,399 - Started ServerConnector@74e28667{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:31:29,399 - Started @3385ms
+2018-08-11 00:31:29,399 - Server started
+2018-08-11 00:31:29,399 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:31:30,002 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:32:32,538 - Exception when handle resume information
+2018-08-11 00:32:32,539 - Try update resume
+2018-08-11 00:32:32,577 - Logging initialized @735ms
+2018-08-11 00:32:32,610 - jetty-9.3.9.M0
+2018-08-11 00:32:32,628 - Started ServerConnector@481a996b{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:32:32,628 - Started @787ms
+2018-08-11 00:32:32,628 - Server started
+2018-08-11 00:32:32,631 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:32:33,221 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:32:35,301 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:32:35,327 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 21 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.Liu0Bk}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: cb882edb5455c9dd90e28ee1e264dc3f
+*** Element info: {Using=name, value=username}
+2018-08-11 00:32:35,330 - Stopped ServerConnector@481a996b{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:32:35,332 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:32:35,332 - try 1 of 3
+2018-08-11 00:32:35,332 - Try update resume
+2018-08-11 00:32:35,332 - jetty-9.3.9.M0
+2018-08-11 00:32:35,334 - Started ServerConnector@3f4b99e1{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:32:35,334 - Started @3492ms
+2018-08-11 00:32:35,334 - Server started
+2018-08-11 00:32:35,334 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:32:35,843 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:32:38,144 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:32:38,194 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 48 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.e26dSZ}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 26914c5e7eca6f412737f81490b7a1dd
+*** Element info: {Using=name, value=username}
+2018-08-11 00:32:38,196 - Stopped ServerConnector@3f4b99e1{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:32:38,197 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:32:38,197 - try 2 of 3
+2018-08-11 00:32:38,197 - Try update resume
+2018-08-11 00:32:38,198 - jetty-9.3.9.M0
+2018-08-11 00:32:38,201 - Started ServerConnector@548d708a{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:32:38,201 - Started @6360ms
+2018-08-11 00:32:38,201 - Server started
+2018-08-11 00:32:38,202 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:32:38,755 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:32:40,774 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:32:40,816 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 40 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.9AOEQ0}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 4652e662ed3c8c5c7e828a30c889544c
+*** Element info: {Using=name, value=username}
+2018-08-11 00:32:40,820 - Stopped ServerConnector@548d708a{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:32:40,821 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:32:40,821 - try 3 of 3
+2018-08-11 00:32:40,821 - Try update resume
+2018-08-11 00:32:40,821 - jetty-9.3.9.M0
+2018-08-11 00:32:40,822 - Started ServerConnector@4c60d6e9{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:32:40,822 - Started @8981ms
+2018-08-11 00:32:40,822 - Server started
+2018-08-11 00:32:40,823 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:32:41,380 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:32:43,444 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:32:43,487 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 43 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.v92vOR}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 82784c9c741039b2cf3bac4ec11517ef
+*** Element info: {Using=name, value=username}
+2018-08-11 00:32:43,489 - Stopped ServerConnector@4c60d6e9{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:32:43,490 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:32:43,490 - try 4 of 3
+2018-08-11 00:32:43,490 - Не удалось обновить резюме
+2018-08-11 00:35:41,152 - Exception when handle resume information
+2018-08-11 00:35:41,153 - Try update resume
+2018-08-11 00:35:41,187 - Logging initialized @1318ms
+2018-08-11 00:35:41,224 - jetty-9.3.9.M0
+2018-08-11 00:35:41,279 - Started ServerConnector@68dc098b{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:35:41,280 - Started @1413ms
+2018-08-11 00:35:41,280 - Server started
+2018-08-11 00:36:10,490 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:36:11,368 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:36:14,067 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:36:14,128 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 47 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.m2ls70}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: e31a077e8da1864cf2871b2c8f97c172
+*** Element info: {Using=name, value=username}
+2018-08-11 00:36:14,140 - Stopped ServerConnector@68dc098b{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:36:14,146 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:36:14,146 - try 1 of 1
+2018-08-11 00:36:14,146 - Try update resume
+2018-08-11 00:36:14,146 - jetty-9.3.9.M0
+2018-08-11 00:36:14,157 - Started ServerConnector@5b080f3a{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:36:14,157 - Started @34290ms
+2018-08-11 00:36:14,157 - Server started
+2018-08-11 00:36:36,088 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:36:36,568 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:36:38,302 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:36:38,312 - no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 9 milliseconds
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.u4uvRL}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 6f5a2c68355df11fdcbbb3cac3af43f3
+*** Element info: {Using=name, value=username}
+2018-08-11 00:36:38,312 - Stopped ServerConnector@5b080f3a{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:36:38,314 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:36:38,314 - try 2 of 1
+2018-08-11 00:36:38,314 - Не удалось обновить резюме
+2018-08-11 00:43:09,990 - Токен неверный, либо не получен
+2018-08-11 00:43:09,991 - Try update resume
+2018-08-11 00:43:10,005 - Logging initialized @61551ms
+2018-08-11 00:43:10,027 - jetty-9.3.9.M0
+2018-08-11 00:43:10,050 - Started ServerConnector@2280cdac{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:43:10,050 - Started @61597ms
+2018-08-11 00:43:10,050 - Server started
+2018-08-11 00:43:10,053 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:43:10,860 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:43:13,010 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:43:13,065 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 45 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.pKLmM4}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 052ba1ffb8cec04044dda3f1353c0f6e
+*** Element info: {Using=name, value=username}
+2018-08-11 00:43:13,071 - Stopped ServerConnector@2280cdac{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:43:13,072 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:43:13,072 - try 1 of 1
+2018-08-11 00:43:13,072 - Try update resume
+2018-08-11 00:43:13,072 - jetty-9.3.9.M0
+2018-08-11 00:43:13,074 - Started ServerConnector@1e7bb87c{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:43:13,074 - Started @64622ms
+2018-08-11 00:43:13,074 - Server started
+2018-08-11 00:43:13,075 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:43:13,651 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:43:15,762 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:43:15,800 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 37 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.U7WArS}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 8dbd72011dcca193eb38b0826730884f
+*** Element info: {Using=name, value=username}
+2018-08-11 00:43:15,801 - Stopped ServerConnector@1e7bb87c{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:43:15,804 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:43:15,804 - try 2 of 1
+2018-08-11 00:43:15,804 - Не удалось обновить резюме
+2018-08-11 00:44:10,348 - Токен неверный, либо не получен
+2018-08-11 00:44:10,349 - Try update resume
+2018-08-11 00:44:10,365 - Logging initialized @177ms
+2018-08-11 00:44:10,391 - jetty-9.3.9.M0
+2018-08-11 00:44:10,425 - Started ServerConnector@29444d75{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:44:10,425 - Started @240ms
+2018-08-11 00:44:10,425 - Server started
+2018-08-11 00:44:10,429 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:44:11,329 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:44:13,274 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:44:13,302 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 22 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.FCUaF4}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: 705ffb48d656f68078752ae1d70dc17b
+*** Element info: {Using=name, value=username}
+2018-08-11 00:44:13,305 - Stopped ServerConnector@29444d75{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:44:13,306 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:44:13,306 - try 1 of 0
+2018-08-11 00:44:13,306 - Не удалось обновить резюме
+2018-08-11 00:45:08,143 - Токен неверный, либо не получен
+2018-08-11 00:45:08,143 - Try update resume
+2018-08-11 00:45:08,157 - Logging initialized @149ms
+2018-08-11 00:45:08,180 - jetty-9.3.9.M0
+2018-08-11 00:45:08,206 - Started ServerConnector@29444d75{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:45:08,207 - Started @202ms
+2018-08-11 00:45:08,207 - Server started
+2018-08-11 00:45:08,207 - Identity: ClientIdentity [clientSecret=ORKJLA8JPF7T23D4FJALC7F4E7HU8S901H7MB07RNPE44V78OS4T42S40TMMI3DV, clientId=G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU, hhUserName=slyisarenko-ilya@mail.ru, hhPassword=JXmXy798qZTknL7Mga]
+2018-08-11 00:45:08,210 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 00:45:09,057 - driver location: https://hh.ru/oauth/authorize?response_type=code
+2018-08-11 00:45:11,414 - Fill authorization form at hh.ru with selenium
+2018-08-11 00:45:11,465 - no such element: Unable to locate element: {"method":"name","selector":"username"}
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 42 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.jIiZia}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: daade8cab9b0ee0f31c08d881efaf8fb
+*** Element info: {Using=name, value=username}
+2018-08-11 00:45:11,469 - Stopped ServerConnector@29444d75{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 00:45:11,471 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 00:45:11,471 - try 1 of 0
+2018-08-11 00:45:11,471 - Не удалось обновить резюме
+2018-08-11 01:00:58,809 - Токен неверный, либо не получен
+2018-08-11 01:00:58,810 - Try update resume
+2018-08-11 01:00:58,823 - Logging initialized @159ms
+2018-08-11 01:00:58,845 - jetty-9.3.9.M0
+2018-08-11 01:00:58,869 - Started ServerConnector@29444d75{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 01:00:58,869 - Started @208ms
+2018-08-11 01:00:58,869 - Server started
+2018-08-11 01:00:58,870 - Identity: ClientIdentity [clientSecret=ORKJLA8JPF7T23D4FJALC7F4E7HU8S901H7MB07RNPE44V78OS4T42S40TMMI3DV, clientId=G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU, hhUserName=slyisarenko-ilya@mail.ru, hhPassword=JXmXy798qZTknL7Mga]
+2018-08-11 01:00:58,872 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 01:00:59,787 - driver location: https://hh.ru/oauth/authorize?response_type=code&client_id=G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU
+2018-08-11 01:01:01,969 - Fill authorization form at hh.ru with selenium
+2018-08-11 01:01:02,015 - unknown error: keys should be a string
+  (Session info: chrome=68.0.3440.106)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Linux 4.15.0-30-generic x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 27 milliseconds
+Build info: version: '2.53.0', revision: '35ae25b1534ae328c771e0856c93e187490ca824', time: '2016-03-15 10:43:46'
+System info: host: 'laptop', ip: '127.0.0.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.15.0-30-generic', java.version: '1.8.0_161'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb), userDataDir=/tmp/.org.chromium.Chromium.BiYaPj}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=68.0.3440.106, platform=LINUX, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=false, acceptInsecureCerts=false, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=}]
+Session ID: b32f1a0a4e4313bbf2aee64536100bfa
+2018-08-11 01:01:02,018 - Stopped ServerConnector@29444d75{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 01:01:02,019 - Server stopped after error. Try remove or correct properties file or investigate problem depeer
+2018-08-11 01:01:02,019 - try 1 of 0
+2018-08-11 01:01:02,019 - Не удалось обновить резюме
+2018-08-11 01:02:19,092 - Токен неверный, либо не получен
+2018-08-11 01:02:19,092 - Try update resume
+2018-08-11 01:02:19,105 - Logging initialized @154ms
+2018-08-11 01:02:19,127 - jetty-9.3.9.M0
+2018-08-11 01:02:19,158 - Started ServerConnector@29444d75{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 01:02:19,158 - Started @209ms
+2018-08-11 01:02:19,158 - Server started
+2018-08-11 01:02:19,159 - Identity: ClientIdentity [clientSecret=ORKJLA8JPF7T23D4FJALC7F4E7HU8S901H7MB07RNPE44V78OS4T42S40TMMI3DV, clientId=G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU, hhUserName=slyisarenko-ilya@mail.ru, hhPassword=JXmXy798qZTknL7Mga]
+2018-08-11 01:02:19,161 - Emulate user login and fetch ACCESS_TOKEN
+2018-08-11 01:02:20,034 - driver location: https://hh.ru/oauth/authorize?response_type=code&client_id=G7RLL36FL0Q69S2B8UA6SRE4E16886P551C1O82I1B9VOR27P0ET3IULCAN24SBU
+2018-08-11 01:02:22,385 - Fill authorization form at hh.ru with selenium
+2018-08-11 01:02:22,965 - Work with code: /code: IKTAMJOTHGFPGLEKRREB9QPQMK1RA4ENAT8ELOUOQT7AGAHHDAUR4VI5E87OKOD7
+2018-08-11 01:02:22,970 - Get token and try update resume
+2018-08-11 01:02:23,250 - Access token: J63FN664RSDNVCR75G75KRVH6PL0STLNU8JCVFLBJ5CG5EIKMQL22OQ707BUMJMJ
+2018-08-11 01:02:23,251 - Store TOKEN in properties. It expired at some weeks ago. J63FN664RSDNVCR75G75KRVH6PL0STLNU8JCVFLBJ5CG5EIKMQL22OQ707BUMJMJ
+2018-08-11 01:02:23,504 - Try update resume: 75c5254bff002124540039ed1f736563726574
+2018-08-11 01:02:23,725 - About statuses you can read here: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish
+2018-08-11 01:02:23,746 - Ответ сервера в сыром виде: org.apache.http.message.BasicStatusLine@2d975bfe[
+  protoVersion=HTTP/1.1
+  statusCode=204
+  reasonPhrase=No Content
+]
+2018-08-11 01:02:23,746 - Resume updated!
+2018-08-11 01:02:23,753 - Stopped ServerConnector@29444d75{HTTP/1.1,[http/1.1]}{0.0.0.0:8090}
+2018-08-11 01:02:23,865 - Stopping selenium...
+2018-08-11 01:02:38,754 - Error when stop Jetty server!null

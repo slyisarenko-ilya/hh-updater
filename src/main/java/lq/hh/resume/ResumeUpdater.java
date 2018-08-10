@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 
 import lq.hh.exception.CannotUpdateException;
 import lq.hh.exception.NoPropertiesException;
+import lq.hh.resume.auth.ClientIdentity;
+import lq.hh.resume.auth.secret.SecretManager;
 //
 public class ResumeUpdater implements Runnable {
 
@@ -42,14 +44,16 @@ public class ResumeUpdater implements Runnable {
     private static final Integer JETTY_PORT = 8090;
     
 	private static final String TOKEN = "token";
-	private static final String CLIENT_SECRET = "client_secret";
-	private static final String CLIENT_ID = "client_id";
-	private static final String HEADHUNT_USERNAME = "username";
-	private static final String HEADHUNT_PASSWORD = "password";
-	private static final int FETCH_TOKEN_TRIES_COUNT = 3;
+
+	private static final int FETCH_TOKEN_TRIES_COUNT = 0;
 	private static String AUTH_LOCATION = "https://hh.ru/oauth/authorize";
 	
-
+	private SecretManager secretManager;
+	
+	public ResumeUpdater() {
+		 secretManager = new SecretManager();
+	}
+	
 	/**
 	 * Приложение делает сервер-сервер POST-запрос на
 	 * https://m.hh.ru/oauth/token для обмена полученного authorization_code
@@ -63,8 +67,10 @@ public class ResumeUpdater implements Runnable {
 	public String fetchAccessToken(String code) throws OAuthProblemException, NoPropertiesException {
 		String accessToken = null;
 
-		String clientId = PropertyUtil.loadProperty(CLIENT_ID);
-		String clientSecret = PropertyUtil.loadProperty(CLIENT_SECRET);
+		ClientIdentity identity = secretManager.getClientIdentity();
+		
+		String clientId = identity.getClientId();
+		String clientSecret = identity.getClientSecret();
 
 		logger.debug("\n[STEP] Request Access Token");
 		OAuthClientRequest request = null;
@@ -138,7 +144,6 @@ public class ResumeUpdater implements Runnable {
 				HttpUtil.post("/resumes/" + resumeId + "/publish", accessToken);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new CannotUpdateException("Exception when handle resume information", e);
 		}
 	}
@@ -241,9 +246,11 @@ public class ResumeUpdater implements Runnable {
 		
 		//в системе нужно установить chrome driver. если он не установлен глобально, то необходимо скачать и настроить путь к нему
 		//System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver");
-
+		
+		ClientIdentity identity = secretManager.getClientIdentity();
+		logger.info("Identity: " + identity);
 		OAuthClientRequest request = OAuthClientRequest.authorizationLocation(AUTH_LOCATION)
-				.setClientId(PropertyUtil.loadProperty(CLIENT_ID)).setResponseType("code").buildQueryMessage();
+				.setClientId(identity.getClientId()).setResponseType("code").buildQueryMessage();
 
 		logger.info("Emulate user login and fetch ACCESS_TOKEN");
 		WebDriver driver = new ChromeDriver();
@@ -252,10 +259,10 @@ public class ResumeUpdater implements Runnable {
 		logger.info("Fill authorization form at hh.ru with selenium");
 
 		WebElement userNameField = driver.findElement(By.ByName.name("username"));
-		String userName = PropertyUtil.loadProperty(HEADHUNT_USERNAME);
+		String userName = identity.getHhUserName();
 		userNameField.sendKeys(userName);
 		WebElement passwordField = driver.findElement(By.ByName.name("password"));
-		String password = PropertyUtil.loadProperty(HEADHUNT_PASSWORD);
+		String password = identity.getHhPassword();
 		passwordField.sendKeys(password);
 		WebElement sendButton = driver.findElement(By.ByCssSelector.cssSelector("input[type='submit']"));
 		sendButton.submit();
@@ -272,7 +279,7 @@ public class ResumeUpdater implements Runnable {
 			public void run(String code) throws Exception {
 				String accessToken = fetchAccessToken(code);
 				logger.info("Store TOKEN in properties. It expired at some weeks ago. " + accessToken);
-				PropertyUtil.storeProperty(TOKEN, accessToken);
+				PropertiesService.storeProperty(TOKEN, accessToken);
 				updateResume(accessToken);
 			}
 		});
@@ -310,7 +317,7 @@ public class ResumeUpdater implements Runnable {
 		while(!propertiesExists && !exit){
 			try {
 	
-				String token = PropertyUtil.loadProperty(TOKEN);
+				String token = PropertiesService.loadProperty(TOKEN);
 				propertiesExists = true;
 				try{
 					if (token != null && !token.isEmpty()) {
@@ -322,11 +329,10 @@ public class ResumeUpdater implements Runnable {
 				} catch(CannotUpdateException e){
 					logger.error(e.getLocalizedMessage());
 				}
-				if(!updated){
-					tryFullTokenUpdateProcess();
-				}
 				if(updated){
 					logger.info("Итерация обновления резюме завершена успешно");
+				} else {
+					tryFullTokenUpdateProcess();
 				}
 			} catch(NoPropertiesException npe){
 				propertiesExists = false;
@@ -334,8 +340,7 @@ public class ResumeUpdater implements Runnable {
 					buildPropertiesInteractive();
 				} catch(IOException ioe){ // в случае такой ошибки - завершать процесс.
 					
-					logger.error("Не получается сохранить параметры. Здесь уже врядли что-то поможет кроме разработчика.");
-					ioe.printStackTrace();
+					logger.error("Не получается сохранить параметры. Здесь уже врядли что-то поможет кроме разработчика.", ioe);
 					exit = true;
 					
 				}
@@ -347,23 +352,8 @@ public class ResumeUpdater implements Runnable {
 
 	
 	public void buildPropertiesInteractive() throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		System.out.println("CLIENT_ID и CLIENT_SECRET можно получить на https://dev.hh.ru/admin");
-        System.out.print("CLIENT_ID:>");
-        
-        String clientId = br.readLine();
-        System.out.print("CLIENT_SECRET:>");
-        String clientSecret = br.readLine();
-        System.out.print("Логин для авторизации в headhunt:>");
-        String userName = br.readLine();
-        System.out.print("Пароль headhunt:>");
-        String password = br.readLine();
-        
-        PropertyUtil.storeProperty(CLIENT_SECRET, clientSecret);
-        PropertyUtil.storeProperty(CLIENT_ID, clientId);
-        PropertyUtil.storeProperty(HEADHUNT_USERNAME, userName);
-        PropertyUtil.storeProperty(HEADHUNT_PASSWORD, password);
+		ClientIdentity identity = secretManager.getClientIdentity();
+		secretManager.storeClientIdentity(identity);
 	}
 	
 	public static void main(String[] args) throws Exception {
