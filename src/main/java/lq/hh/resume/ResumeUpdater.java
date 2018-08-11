@@ -1,48 +1,20 @@
 package lq.hh.resume;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.oltu.oauth2.client.URLConnectionClient;
-import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
-import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
-import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
-import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
-import org.apache.oltu.oauth2.common.message.types.GrantType;
-import org.apache.oltu.oauth2.common.utils.JSONUtils;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lq.hh.exception.CannotUpdateException;
-import lq.hh.exception.NoPropertiesException;
-import lq.hh.resume.auth.ClientIdentity;
+import lq.hh.resume.auth.entity.ClientIdentity;
 import lq.hh.resume.auth.secret.SecretManager;
-import lq.hh.resume.auth.token.PropertiesFileTokenRepository;
-import lq.hh.resume.auth.token.SeleniumTokenLoader;
-import lq.hh.resume.auth.token.TokenLoader;
-import lq.hh.resume.auth.token.TokenRepository;
+import lq.hh.resume.auth.token.load.SeleniumTokenLoader;
+import lq.hh.resume.auth.token.load.TokenLoader;
+import lq.hh.resume.auth.token.repo.PropertiesFileTokenRepository;
+import lq.hh.resume.auth.token.repo.TokenRepository;
 import lq.hh.resume.services.HttpService;
 //
-public class ResumeUpdater implements Runnable {
+public class ResumeUpdater{
 
     private static final Logger logger = LoggerFactory.getLogger(ResumeUpdater.class);
     
@@ -58,11 +30,10 @@ public class ResumeUpdater implements Runnable {
 		 identity = secretManager.getClientIdentity();
 		 secretManager.storeClientIdentity(identity);
 
-
 		 tokenLoader = new SeleniumTokenLoader(identity, NUMBER_OF_FETCH_TOKEN_ATTEMPTS);
 	}
 	
-	public void run() {
+	public void start() {
 		
 		boolean exit = false;
 		while( !exit){
@@ -87,7 +58,7 @@ public class ResumeUpdater implements Runnable {
 					exit = true;
 				}
 			} catch (Exception e1) {
-				logger.error(e1.getLocalizedMessage());
+				logger.error("App exception", e1);
 			}
 		} //end while
 	}
@@ -119,7 +90,8 @@ public class ResumeUpdater implements Runnable {
 	
 	public static void main(String[] args) throws Exception {
 		testSystemPropertiesAvailability();
-		(new ResumeUpdater()).run();
+		ResumeUpdater app = new ResumeUpdater();
+		app.start();
 	}
 	
 	private static void testSystemPropertiesAvailability() {

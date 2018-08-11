@@ -1,9 +1,0 @@
-Try update resume: 75c5254bff002124540039ed1f736563726574
-About statuses you can read here: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish
-Ответ сервера в сыром виде: org.apache.http.message.BasicStatusLine@29626d54[
-  protoVersion=HTTP/1.1
-  statusCode=429
-  reasonPhrase=Too Many Requests
-]
-You can update resume once per 4 hours
-Итерация обновления резюме завершена успешно

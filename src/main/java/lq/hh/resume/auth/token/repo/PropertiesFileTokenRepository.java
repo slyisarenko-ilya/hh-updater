@@ -1,4 +1,4 @@
-package lq.hh.resume.auth.token;
+package lq.hh.resume.auth.token.repo;
 
 import lq.hh.resume.services.PropertiesService;
 

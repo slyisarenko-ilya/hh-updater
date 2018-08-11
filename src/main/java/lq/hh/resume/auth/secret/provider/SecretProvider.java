@@ -1,7 +1,7 @@
-package lq.hh.resume.auth.secret;
+package lq.hh.resume.auth.secret.provider;
 
 import lq.hh.exception.GetSecretException;
-import lq.hh.resume.auth.ClientIdentity;
+import lq.hh.resume.auth.entity.ClientIdentity;
 
 public interface SecretProvider {
 	

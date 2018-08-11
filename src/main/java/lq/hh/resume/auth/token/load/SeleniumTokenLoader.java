@@ -1,4 +1,4 @@
-package lq.hh.resume.auth.token;
+package lq.hh.resume.auth.token.load;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,8 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lq.hh.exception.CannotUpdateException;
-import lq.hh.resume.CodeCallback;
-import lq.hh.resume.auth.ClientIdentity;
+import lq.hh.resume.auth.entity.ClientIdentity;
 
 public class SeleniumTokenLoader implements TokenLoader {
     private static final Logger logger = LoggerFactory.getLogger(SeleniumTokenLoader.class);
@@ -50,7 +49,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 		success = false;
 		while (!success) {
 			try {
-				loadAuthorizationCode(new CodeCallback() {
+				loadAuthorizationCode(new LoadCallback() {
 					@Override
 					public void run(String c) throws Exception {
 						code = c;
@@ -120,7 +119,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 	}
 	
 
-	private Server startCatchServer(final CodeCallback callback) throws CannotUpdateException{
+	private Server startCatchServer(final LoadCallback callback) throws CannotUpdateException{
 		
 		final Server hhResponseCatcher = new Server(JETTY_PORT);
 		/*
@@ -180,7 +179,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 	
 
 	
-	public  void loadAuthorizationCode(CodeCallback callback) throws CannotUpdateException {
+	public  void loadAuthorizationCode(LoadCallback callback) throws CannotUpdateException {
 		
 		//jetty сервер ловит ответы от hh.ru, анализирует переданный код
 		//и выполняет необходимые действия по авторизации

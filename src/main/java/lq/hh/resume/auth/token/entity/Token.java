@@ -1,4 +1,4 @@
-package lq.hh.resume.auth.token;
+package lq.hh.resume.auth.token.entity;
 
 public class Token {
 	private String value;

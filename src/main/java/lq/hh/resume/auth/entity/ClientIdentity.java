@@ -1,4 +1,4 @@
-package lq.hh.resume.auth;
+package lq.hh.resume.auth.entity;
 
 public class ClientIdentity {
 

@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lq.hh.exception.GetSecretException;
-import lq.hh.resume.auth.ClientIdentity;
+import lq.hh.resume.auth.entity.ClientIdentity;
+import lq.hh.resume.auth.secret.provider.ConsoleSecretProvider;
+import lq.hh.resume.auth.secret.provider.PropertiesFileSecretProvider;
+import lq.hh.resume.auth.secret.provider.SecretProvider;
+import lq.hh.resume.auth.secret.saver.PropertiesFileSecretSaver;
+import lq.hh.resume.auth.secret.saver.SecretSaver;
 
 public class SecretManager {
 	List<SecretProvider> secretProviders;

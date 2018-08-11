@@ -1,11 +1,11 @@
-package lq.hh.resume.auth.secret;
+package lq.hh.resume.auth.secret.provider;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import lq.hh.exception.GetSecretException;
-import lq.hh.resume.auth.ClientIdentity;
+import lq.hh.resume.auth.entity.ClientIdentity;
 
 public class ConsoleSecretProvider implements SecretProvider {
 
