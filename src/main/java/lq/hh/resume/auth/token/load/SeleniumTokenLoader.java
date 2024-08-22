@@ -3,6 +3,7 @@ package lq.hh.resume.auth.token.load;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 	private int numberOfAttempts;
 	private boolean success;
 	private String chromeDriverBinaryPath;
+	private static final int ATTEMPT_TIMEOUT = 7000;
 
 	public SeleniumTokenLoader(ClientIdentity identity, int numberOfAttempts, String chromeDriverBinaryPath) {
 		this.identity = identity;
@@ -67,9 +69,8 @@ public class SeleniumTokenLoader implements TokenLoader {
 				}
 			}
 			try {
-				Thread.sleep(5000);
+				TimeUnit.MILLISECONDS.sleep(ATTEMPT_TIMEOUT);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				logger.error("", e);
 			}
 		} // end while
