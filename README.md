@@ -25,6 +25,7 @@ ChromeDriver, Chrome binary (https://googlechromelabs.github.io/chrome-for-testi
 ``` 
 #!/bin/sh
 
+cd "$(dirname "$0")"
 CHROME_BINARY=~/<chrome-binary-path>/chrome
 java -jar resume-updater.jar -ea -Dwebdriver.chrome.driver=~/<chrome-driver-path>/chromedriver  -Dwebdriver.chrome.whitelistedIps= 
 ```
