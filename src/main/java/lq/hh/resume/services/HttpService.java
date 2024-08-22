@@ -80,7 +80,7 @@ public class HttpService {
 		HttpResponse response = httpClient.execute(testRequest);
 
 		logger.info(
-				"About statuses you can read here: https://z5h64q92x9.net/proxy_u/ru-en.en/http/hhru.github.io/api/rendered-docs/docs/resumes.md.html#publish");
+				"About statuses you can read here: https://tech.hh.ru/api/rendered-docs/docs/resumes.md.html#publish");
 		logger.info("Ответ сервера в сыром виде: "
 				+ ToStringBuilder.reflectionToString(response.getStatusLine(), ToStringStyle.MULTI_LINE_STYLE));
 
