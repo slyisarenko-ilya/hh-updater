@@ -30,4 +30,13 @@ CHROME_BINARY=~/<chrome-binary-path>/chrome
 java -jar resume-updater.jar -ea -Dwebdriver.chrome.driver=~/<chrome-driver-path>/chromedriver  -Dwebdriver.chrome.whitelistedIps= 
 ```
 
-run: ./hh-updater.sh
+run: 
+```
+./hh-updater.sh
+```
+or:
+```
+while true; do ./hh-updater.sh; sleep 14400; done
+``` 
+
+
