@@ -14,6 +14,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+
+    <slf4j.version>1.7.26</slf4j.version>
+    <logback.version>1.2.3</logback.version>
+
   </properties>
 
   <dependencies>
@@ -28,9 +32,14 @@
         <version>4.5.2</version>
      </dependency>
      <dependency>
-  <groupId>org.seleniumhq.selenium</groupId>
-  <artifactId>selenium-java</artifactId>
-</dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-chrome-driver</artifactId>
+    </dependency>
      
      
      
@@ -78,15 +87,31 @@
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-http</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-    </dependency>
 
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
       </dependency>
+
+    <!-- LOGGING -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>${logback.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+
   </dependencies>
   <dependencyManagement>
     <dependencies>
@@ -107,6 +132,7 @@
         <artifactId>org.apache.oltu.oauth2.common</artifactId>
         <version>1.0.1</version>
       </dependency>
+
 
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
@@ -133,11 +159,13 @@
         <artifactId>jetty-http</artifactId>
         <version>9.3.9.M0</version>
       </dependency>
-      <dependency>
+
+        <dependency>
         <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-log4j12</artifactId>
-        <version>1.7.21</version>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${jcloverslf4j.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
@@ -172,7 +200,12 @@
       <dependency>
       	<groupId>org.seleniumhq.selenium</groupId>
       	<artifactId>selenium-java</artifactId>
-      	<version>2.53.0</version>
+      	<version>4.23.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-chrome-driver</artifactId>
+        <version>4.23.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

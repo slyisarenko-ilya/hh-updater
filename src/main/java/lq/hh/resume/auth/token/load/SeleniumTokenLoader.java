@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lq.hh.exception.CannotGetAuthorizationCodeException;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
@@ -23,6 +24,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +39,12 @@ public class SeleniumTokenLoader implements TokenLoader {
 	private String code = null;
 	private int numberOfAttempts;
 	private boolean success;
+	private String chromeDriverBinaryPath;
 
-	public SeleniumTokenLoader(ClientIdentity identity, int numberOfAttempts) {
+	public SeleniumTokenLoader(ClientIdentity identity, int numberOfAttempts, String chromeDriverBinaryPath) {
 		this.identity = identity;
 		this.numberOfAttempts = numberOfAttempts;
+		this.chromeDriverBinaryPath = chromeDriverBinaryPath;
 	}
 	
 	@Override
@@ -51,7 +55,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 			try {
 				loadAuthorizationCode(new LoadCallback() {
 					@Override
-					public void run(String c) throws Exception {
+					public void run(String c) {
 						code = c;
 						success = true;
 					}
@@ -59,11 +63,11 @@ public class SeleniumTokenLoader implements TokenLoader {
 			} catch (Exception e) {
 				logger.info("try " + count + " of " + numberOfAttempts);
 				if (count++ >= numberOfAttempts) {
-					throw new CannotUpdateException("Не удалось обновить резюме", e);
+					throw e;
 				}
 			}
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				logger.error("", e);
@@ -189,7 +193,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 			authorizeWithSeleniumDriver();
 		} catch(Exception e){
 			logger.error(e.getLocalizedMessage());
-			throw new CannotUpdateException("Cannot start selenium browser", e);
+			throw new CannotGetAuthorizationCodeException("", e);
 		} finally {
 			if (hhResponseCatcher != null && hhResponseCatcher.isStarted()) {
 				try {
@@ -197,7 +201,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 					 logger.error("Server stopped after error. Try remove or correct properties file or investigate problem depeer" );
 				} catch (final Exception e) {
 					e.printStackTrace();
-					throw new CannotUpdateException("jetty problems", e);
+					throw new CannotGetAuthorizationCodeException("jetty problems", e);
 				}
 			}
 		}
@@ -222,18 +226,21 @@ public class SeleniumTokenLoader implements TokenLoader {
 				.setClientId(identity.getClientId()).setResponseType("code").buildQueryMessage();
 
 		logger.info("Emulate user login and fetch ACCESS_TOKEN");
-		WebDriver driver = new ChromeDriver();
+		ChromeOptions options = new ChromeOptions();
+		options.setBinary(chromeDriverBinaryPath);
+		WebDriver driver = new ChromeDriver(options);
+
 		logger.info("driver location: " + request.getLocationUri());
 		driver.get(request.getLocationUri());
 		logger.info("Fill authorization form at hh.ru with selenium");
 
-		WebElement userNameField = driver.findElement(By.ByName.name("username"));
+		WebElement userNameField = driver.findElement(new By.ByXPath("//input[@data-qa='login-input-username']"));
 		String userName = identity.getHhUserName();
 		userNameField.sendKeys(userName);
-		WebElement passwordField = driver.findElement(By.ByName.name("password"));
+		WebElement passwordField = driver.findElement(new By.ByXPath("//input[@data-qa='login-input-password']"));
 		String password = identity.getHhPassword();
 		passwordField.sendKeys(password);
-		WebElement sendButton = driver.findElement(By.ByCssSelector.cssSelector("input[type='submit']"));
+		WebElement sendButton = driver.findElement(new By.ByXPath("//button[@data-qa='account-login-submit']"));
 		sendButton.submit();
 		logger.info("Stopping selenium...");
 		driver.close(); // close selenium window

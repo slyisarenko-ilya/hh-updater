@@ -23,6 +23,7 @@ public class ResumeUpdater{
 	private TokenLoader tokenLoader;
 	private int NUMBER_OF_FETCH_TOKEN_ATTEMPTS = 1;
 	private ClientIdentity identity;
+	private String CHROME_BINARY = System.getenv("CHROME_BINARY");
 	
 	public ResumeUpdater() {
 		 secretManager = new SecretManager();
@@ -30,7 +31,8 @@ public class ResumeUpdater{
 		 identity = secretManager.getClientIdentity();
 		 secretManager.storeClientIdentity(identity);
 
-		 tokenLoader = new SeleniumTokenLoader(identity, NUMBER_OF_FETCH_TOKEN_ATTEMPTS);
+
+		 tokenLoader = new SeleniumTokenLoader(identity, NUMBER_OF_FETCH_TOKEN_ATTEMPTS, CHROME_BINARY);
 	}
 	
 	public void start() {
@@ -57,8 +59,8 @@ public class ResumeUpdater{
 					updateResume(token);
 					exit = true;
 				}
-			} catch (Exception e1) {
-				logger.error("App exception", e1);
+			} catch (CannotUpdateException e) {
+				logger.error("", e);
 			}
 		} //end while
 	}
