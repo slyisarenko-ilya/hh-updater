@@ -1,5 +1,9 @@
 package lq.hh.resume;
 
+import lq.hh.resume.services.HttpService;
+import lq.hh.resume.services.InfoService;
+import lq.hh.resume.services.SimpleHttpService;
+import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -12,7 +16,7 @@ import lq.hh.resume.auth.token.load.SeleniumTokenLoader;
 import lq.hh.resume.auth.token.load.TokenLoader;
 import lq.hh.resume.auth.token.repo.PropertiesFileTokenRepository;
 import lq.hh.resume.auth.token.repo.TokenRepository;
-import lq.hh.resume.services.HttpService;
+
 //
 public class ResumeUpdater{
 
@@ -24,13 +28,17 @@ public class ResumeUpdater{
 	private int NUMBER_OF_FETCH_TOKEN_ATTEMPTS = 3;
 	private ClientIdentity identity;
 	private String CHROME_BINARY = System.getenv("CHROME_BINARY");
-	
+	private HttpService httpService;
+
+	private InfoService infoService;
+
 	public ResumeUpdater() {
 		 secretManager = new SecretManager();
 		 tokenRepository = new PropertiesFileTokenRepository();
 		 identity = secretManager.getClientIdentity();
 		 secretManager.storeClientIdentity(identity);
-
+		 httpService = new SimpleHttpService();
+		 infoService = new InfoService();
 
 		 tokenLoader = new SeleniumTokenLoader(identity, NUMBER_OF_FETCH_TOKEN_ATTEMPTS, CHROME_BINARY);
 	}
@@ -72,17 +80,20 @@ public class ResumeUpdater{
 	 */
 	private void updateResume(String accessToken) throws CannotUpdateException {
 		try {
-			String jsonResumes = HttpService.get("/resumes/mine", accessToken);
+			String jsonResumes = httpService.get("/resumes/mine", accessToken);
 
 			JSONObject resumes = new JSONObject(jsonResumes);
 			JSONArray items = resumes.getJSONArray("items");
 			if (items.length() > 0) {
 				JSONObject firstResume = items.getJSONObject(0);
 				String resumeId = firstResume.getString("id");
-				logger.info("Try update resume: " + resumeId);
+				logger.debug("Try update resume: " + resumeId);
 
 				// update resume
-				HttpService.post("/resumes/" + resumeId + "/publish", accessToken);
+				HttpResponse httpResponse = httpService.post("/resumes/" + resumeId + "/publish", accessToken);
+				Integer responseCode = infoService.getStatusCode(httpResponse);
+				String message = infoService.getMessageByStatusCode(responseCode);
+				logger.info(message);
 			}
 		} catch (Exception e) {
 			throw new CannotUpdateException("Exception when handle resume information", e);
