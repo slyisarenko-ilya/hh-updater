@@ -25,7 +25,7 @@ public class ResumeUpdater{
 	private SecretManager secretManager;
 	private TokenRepository tokenRepository;
 	private TokenLoader tokenLoader;
-	private int NUMBER_OF_FETCH_TOKEN_ATTEMPTS = 3;
+	private int NUMBER_OF_FETCH_TOKEN_ATTEMPTS = 5;
 	private ClientIdentity identity;
 	private String CHROME_BINARY = System.getenv("CHROME_BINARY");
 	private HttpService httpService;

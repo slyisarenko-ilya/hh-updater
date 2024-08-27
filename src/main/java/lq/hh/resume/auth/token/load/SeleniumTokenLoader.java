@@ -22,15 +22,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -239,6 +236,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 
 		logger.info("Emulate user login and fetch ACCESS_TOKEN");
 		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--headless=new");
 		options.setPageLoadTimeout(Duration.of(15, ChronoUnit.SECONDS));
 		options.setBinary(chromeDriverBinaryPath);
 		WebDriver driver = new ChromeDriver(options);
