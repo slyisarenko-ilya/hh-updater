@@ -22,10 +22,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -234,13 +239,13 @@ public class SeleniumTokenLoader implements TokenLoader {
 
 		logger.info("Emulate user login and fetch ACCESS_TOKEN");
 		ChromeOptions options = new ChromeOptions();
+		options.setPageLoadTimeout(Duration.of(15, ChronoUnit.SECONDS));
 		options.setBinary(chromeDriverBinaryPath);
 		WebDriver driver = new ChromeDriver(options);
 
 		logger.info("driver location: " + request.getLocationUri());
 		driver.get(request.getLocationUri());
 		logger.info("Fill authorization form at hh.ru with selenium");
-
 		WebElement userNameField = driver.findElement(new By.ByXPath("//input[@data-qa='login-input-username']"));
 		String userName = identity.getHhUserName();
 		userNameField.sendKeys(userName);
@@ -252,7 +257,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 		logger.info("Submit form for token");
 
 		sendButton.submit();
-		delaySec(3); //give some time for answer
+		delaySec(2);
 
 		logger.info("Stopping selenium... Server's answer with generated token expected in callback.");
 		driver.close(); // close selenium window
