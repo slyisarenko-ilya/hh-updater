@@ -1,15 +1,11 @@
 package lq.hh.resume.auth.token.load;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lq.hh.exception.CannotGetAuthorizationCodeException;
+import lq.hh.exception.CannotUpdateException;
+import lq.hh.resume.auth.entity.ClientIdentity;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
@@ -29,8 +25,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lq.hh.exception.CannotUpdateException;
-import lq.hh.resume.auth.entity.ClientIdentity;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class SeleniumTokenLoader implements TokenLoader {
     private static final Logger logger = LoggerFactory.getLogger(SeleniumTokenLoader.class);
@@ -137,7 +135,7 @@ public class SeleniumTokenLoader implements TokenLoader {
 		Handler callbackHandler = new AbstractHandler() {
 			
 			public void handle(String target, Request baseRequest, HttpServletRequest request,
-					HttpServletResponse response) throws IOException, ServletException {
+							   HttpServletResponse response) throws IOException, ServletException {
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 				if (target.contains("/code")) {
 					String code = baseRequest.getParameter("code");
@@ -199,16 +197,24 @@ public class SeleniumTokenLoader implements TokenLoader {
 			if (hhResponseCatcher != null && hhResponseCatcher.isStarted()) {
 				try {
 					 hhResponseCatcher.stop();
-					 logger.error("Server stopped after error. Try remove or correct properties file or investigate problem depeer" );
+					 logger.error("Response Catcher stopped by timeout. No response from HH arrived. Please investigate." );
 				} catch (final Exception e) {
-					e.printStackTrace();
+					logger.error("", e);
 					throw new CannotGetAuthorizationCodeException("jetty problems", e);
 				}
 			}
 		}
 	}
 
-	
+	private static void delaySec(int timeout) {
+		try {
+			TimeUnit.SECONDS.sleep(timeout);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
 	/**
 	 * Приложение направляет пользователя по адресу:
 	 * https://m.hh.ru/oauth/authorize?response_type=code&client_id={
@@ -241,9 +247,14 @@ public class SeleniumTokenLoader implements TokenLoader {
 		WebElement passwordField = driver.findElement(new By.ByXPath("//input[@data-qa='login-input-password']"));
 		String password = identity.getHhPassword();
 		passwordField.sendKeys(password);
+
 		WebElement sendButton = driver.findElement(new By.ByXPath("//button[@data-qa='account-login-submit']"));
+		logger.info("Submit form for token");
+
 		sendButton.submit();
-		logger.info("Stopping selenium...");
+		delaySec(3); //give some time for answer
+
+		logger.info("Stopping selenium... Server's answer with generated token expected in callback.");
 		driver.close(); // close selenium window
 		driver.quit();
 	}
