@@ -18,7 +18,7 @@
 mvn clean compile assembly:single
 ```
 
-ChromeDriver, Chrome binary (https://googlechromelabs.github.io/chrome-for-testing/#stable)
+Chrome binary (https://googlechromelabs.github.io/chrome-for-testing/#stable)
 Запускать из терминала т.к. требуется ввод параметров.
 
 ## run example
@@ -27,7 +27,9 @@ ChromeDriver, Chrome binary (https://googlechromelabs.github.io/chrome-for-testi
 
 cd "$(dirname "$0")"
 CHROME_BINARY=~/<chrome-binary-path>/chrome
-java -jar resume-updater.jar -ea -Dwebdriver.chrome.driver=~/<chrome-driver-path>/chromedriver  -Dwebdriver.chrome.whitelistedIps= 
+# WEB_DRIVER_HEADLESS=false  # по-умолчанию false. Можно указать true, если хотим видеть как открывается форма авторизации hh, например, в целях отладки
+# NUMBER_OF_FETCH_TOKEN_ATTEMPTS = 5 # если токен не задан или истёк, количество попыток его получения
+java -jar resume-updater.jar   -Dwebdriver.chrome.whitelistedIps= 
 ```
 
 run: 

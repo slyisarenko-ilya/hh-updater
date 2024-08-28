@@ -1,14 +1,5 @@
 package lq.hh.resume;
 
-import lq.hh.resume.services.HttpService;
-import lq.hh.resume.services.InfoService;
-import lq.hh.resume.services.SimpleHttpService;
-import org.apache.http.HttpResponse;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lq.hh.exception.CannotUpdateException;
 import lq.hh.resume.auth.entity.ClientIdentity;
 import lq.hh.resume.auth.secret.SecretManager;
@@ -16,18 +7,29 @@ import lq.hh.resume.auth.token.load.SeleniumTokenLoader;
 import lq.hh.resume.auth.token.load.TokenLoader;
 import lq.hh.resume.auth.token.repo.PropertiesFileTokenRepository;
 import lq.hh.resume.auth.token.repo.TokenRepository;
+import lq.hh.resume.services.HttpService;
+import lq.hh.resume.services.InfoService;
+import lq.hh.resume.services.SimpleHttpService;
+import lq.hh.resume.services.VariablesService;
+import org.apache.http.HttpResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //
 public class ResumeUpdater{
 
     private static final Logger logger = LoggerFactory.getLogger(ResumeUpdater.class);
-    
+
 	private SecretManager secretManager;
 	private TokenRepository tokenRepository;
 	private TokenLoader tokenLoader;
-	private int NUMBER_OF_FETCH_TOKEN_ATTEMPTS = 5;
+	private static final String NUMBER_OF_FETCH_TOKEN_ATTEMPTS = "NUMBER_OF_FETCH_TOKEN_ATTEMPTS";
+	private static final Integer DEFAULT_FETCH_TOKEN_ATTEMPTS_COUNT = 5;
 	private ClientIdentity identity;
-	private String CHROME_BINARY = System.getenv("CHROME_BINARY");
+	private VariablesService variablesService;
+	private static final String CHROME_BINARY = "CHROME_BINARY";
 	private HttpService httpService;
 
 	private InfoService infoService;
@@ -39,8 +41,10 @@ public class ResumeUpdater{
 		 secretManager.storeClientIdentity(identity);
 		 httpService = new SimpleHttpService();
 		 infoService = new InfoService();
-
-		 tokenLoader = new SeleniumTokenLoader(identity, NUMBER_OF_FETCH_TOKEN_ATTEMPTS, CHROME_BINARY);
+		 variablesService = new VariablesService();
+		 String chromeBinary = variablesService.getString(CHROME_BINARY);
+		 Integer fetchTokenAttempts = variablesService.getInt(NUMBER_OF_FETCH_TOKEN_ATTEMPTS, DEFAULT_FETCH_TOKEN_ATTEMPTS_COUNT);
+		 tokenLoader = new SeleniumTokenLoader(identity, fetchTokenAttempts, chromeBinary, variablesService);
 	}
 	
 	public void start() {
@@ -101,14 +105,9 @@ public class ResumeUpdater{
 	}
  
 	
-	public static void main(String[] args) throws Exception {
-		testSystemPropertiesAvailability();
+	public static void main(String[] args) {
 		ResumeUpdater app = new ResumeUpdater();
 		app.start();
 	}
-	
-	private static void testSystemPropertiesAvailability() {
-        logger.debug(System.getProperty("webdriver.chrome.driver"));
-        assert System.getProperty("webdriver.chrome.driver") != null;
-	}
+
 }

@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lq.hh.exception.CannotGetAuthorizationCodeException;
 import lq.hh.exception.CannotUpdateException;
 import lq.hh.resume.auth.entity.ClientIdentity;
+import lq.hh.resume.services.VariablesService;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
@@ -37,16 +38,19 @@ public class SeleniumTokenLoader implements TokenLoader {
     private static final Integer JETTY_PORT = 8090;
     private ClientIdentity identity;
 	private static String AUTH_LOCATION = "https://hh.ru/oauth/authorize";
+	private static final String WEB_DRIVER_HEADLESS = "WEB_DRIVER_HEADLESS";
 	private String code = null;
 	private int numberOfAttempts;
 	private boolean success;
 	private String chromeDriverBinaryPath;
 	private static final int ATTEMPT_TIMEOUT = 7000;
+	private boolean headless;
 
-	public SeleniumTokenLoader(ClientIdentity identity, int numberOfAttempts, String chromeDriverBinaryPath) {
+	public SeleniumTokenLoader(ClientIdentity identity, int numberOfAttempts, String chromeDriverBinaryPath, VariablesService variablesService) {
 		this.identity = identity;
 		this.numberOfAttempts = numberOfAttempts;
 		this.chromeDriverBinaryPath = chromeDriverBinaryPath;
+		this.headless = variablesService.getBoolean(WEB_DRIVER_HEADLESS, true);
 	}
 	
 	@Override
@@ -236,7 +240,9 @@ public class SeleniumTokenLoader implements TokenLoader {
 
 		logger.info("Emulate user login and fetch ACCESS_TOKEN");
 		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--headless=new");
+		if(headless) {
+			options.addArguments("--headless=new");
+		}
 		options.setPageLoadTimeout(Duration.of(15, ChronoUnit.SECONDS));
 		options.setBinary(chromeDriverBinaryPath);
 		WebDriver driver = new ChromeDriver(options);
