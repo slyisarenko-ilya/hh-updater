@@ -5,11 +5,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lq.hh.exception.CannotGetAuthorizationCodeException;
 import lq.hh.exception.CannotUpdateException;
+import lq.hh.exception.NullPathToChromeExecutable;
+import lq.hh.exception.WrongPathToChromeExecutable;
+import lq.hh.resume.ResumeUpdater;
 import lq.hh.resume.auth.entity.ClientIdentity;
 import lq.hh.resume.services.VariablesService;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
+import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
@@ -36,7 +40,8 @@ import java.util.concurrent.TimeUnit;
 public class SeleniumTokenLoader implements TokenLoader {
     private static final Logger logger = LoggerFactory.getLogger(SeleniumTokenLoader.class);
     private static final Integer JETTY_PORT = 8090;
-    private ClientIdentity identity;
+	private static final String HINT_CHROME_BINARY_URL = "https://googlechromelabs.github.io/chrome-for-testing/#stable";
+	private ClientIdentity identity;
 	private static String AUTH_LOCATION = "https://hh.ru/oauth/authorize";
 	private static final String WEB_DRIVER_HEADLESS = "WEB_DRIVER_HEADLESS";
 	private String code = null;
@@ -66,6 +71,12 @@ public class SeleniumTokenLoader implements TokenLoader {
 						success = true;
 					}
 				});
+			} catch (WrongPathToChromeExecutable e){
+				logger.error("Please download latest chrome binary for your 0perational System from {} and set env var {}", HINT_CHROME_BINARY_URL, ResumeUpdater.CHROME_BINARY);
+				throw e;
+			} catch (NullPathToChromeExecutable e){
+				logger.error("Please download latest chrome binary for your 0perational System from {} and set env var {}", HINT_CHROME_BINARY_URL, ResumeUpdater.CHROME_BINARY);
+				throw e;
 			} catch (Exception e) {
 				logger.info("try " + count + " of " + numberOfAttempts);
 				if (count++ >= numberOfAttempts) {
@@ -196,17 +207,15 @@ public class SeleniumTokenLoader implements TokenLoader {
 		try{
 			hhResponseCatcher = startCatchServer(callback);
 			authorizeWithSeleniumDriver();
-		} catch(Exception e){
-			logger.error(e.getLocalizedMessage());
-			throw new CannotGetAuthorizationCodeException("", e);
+		} catch(OAuthSystemException e){
+			throw new CannotGetAuthorizationCodeException(e);
 		} finally {
 			if (hhResponseCatcher != null && hhResponseCatcher.isStarted()) {
 				try {
 					 hhResponseCatcher.stop();
 					 logger.error("Response Catcher stopped by timeout. No response from HH arrived. Please investigate." );
 				} catch (final Exception e) {
-					logger.error("", e);
-					throw new CannotGetAuthorizationCodeException("jetty problems", e);
+					 logger.error("Exception when stopping response catch service", e);
 				}
 			}
 		}
@@ -230,21 +239,28 @@ public class SeleniumTokenLoader implements TokenLoader {
 	 * разрешение доступа приложения к его персональным данным.
 	 */
 	private void authorizeWithSeleniumDriver() throws OAuthSystemException{
-		
+
 		//в системе нужно установить chrome driver. если он не установлен глобально, то необходимо скачать и настроить путь к нему
-		//System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver");
-		
+
 		logger.info("Identity: " + identity);
 		OAuthClientRequest request = OAuthClientRequest.authorizationLocation(AUTH_LOCATION)
 				.setClientId(identity.getClientId()).setResponseType("code").buildQueryMessage();
 
 		logger.info("Emulate user login and fetch ACCESS_TOKEN");
 		ChromeOptions options = new ChromeOptions();
+		if(chromeDriverBinaryPath != null) {
+			try {
+
+				options.setBinary(chromeDriverBinaryPath);
+			} catch (IllegalArgumentException ie) {
+				throw new NullPathToChromeExecutable(chromeDriverBinaryPath, ie);
+			}
+		}
+
 		if(headless) {
 			options.addArguments("--headless=new");
 		}
 		options.setPageLoadTimeout(Duration.of(15, ChronoUnit.SECONDS));
-		options.setBinary(chromeDriverBinaryPath);
 		WebDriver driver = new ChromeDriver(options);
 
 		logger.info("driver location: " + request.getLocationUri());

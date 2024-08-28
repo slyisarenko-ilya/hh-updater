@@ -29,7 +29,7 @@ public class ResumeUpdater{
 	private static final Integer DEFAULT_FETCH_TOKEN_ATTEMPTS_COUNT = 5;
 	private ClientIdentity identity;
 	private VariablesService variablesService;
-	private static final String CHROME_BINARY = "CHROME_BINARY";
+	public static final String CHROME_BINARY = "CHROME_BINARY";
 	private HttpService httpService;
 
 	private InfoService infoService;
