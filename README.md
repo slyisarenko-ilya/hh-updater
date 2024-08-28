@@ -27,6 +27,8 @@ mvn clean compile assembly:single
 #!/bin/sh
 
 cd "$(dirname "$0")"
+
+# CHROME_BINARY=<path>/chrome   # возможно, понадобится скачать chrome binary для соответствующий ОС https://googlechromelabs.github.io/chrome-for-testing/#stable
 # WEB_DRIVER_HEADLESS=false  # по-умолчанию false. Можно указать true, если хотим видеть как открывается форма авторизации hh, например, в целях отладки
 # NUMBER_OF_FETCH_TOKEN_ATTEMPTS = 5 # если токен не задан или истёк, количество попыток его получения
 java -jar resume-updater.jar   -Dwebdriver.chrome.whitelistedIps= 
@@ -38,7 +40,6 @@ run:
 ```
 or:
 ```
-# CHROME_BINARY=<path>/chrome   # возможно, понадобится скачать chrome binary для соответствующий ОС https://googlechromelabs.github.io/chrome-for-testing/#stable
 while true; do ./hh-updater.sh; sleep 3600; done
 ``` 
 
