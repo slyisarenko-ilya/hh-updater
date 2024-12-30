@@ -266,6 +266,9 @@ public class SeleniumTokenLoader implements TokenLoader {
 		logger.info("driver location: " + request.getLocationUri());
 		driver.get(request.getLocationUri());
 		logger.info("Fill authorization form at hh.ru with selenium");
+		WebElement loginWithPasswordButton = driver.findElement(new By.ByXPath("//button[@data-qa='expand-login-by_password']"));
+		loginWithPasswordButton.click();
+
 		WebElement userNameField = driver.findElement(new By.ByXPath("//input[@data-qa='login-input-username']"));
 		String userName = identity.getHhUserName();
 		userNameField.sendKeys(userName);
