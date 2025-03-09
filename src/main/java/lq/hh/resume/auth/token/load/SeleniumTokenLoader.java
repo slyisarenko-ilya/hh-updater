@@ -44,18 +44,28 @@ public class SeleniumTokenLoader implements TokenLoader {
 	private ClientIdentity identity;
 	private static String AUTH_LOCATION = "https://hh.ru/oauth/authorize";
 	private static final String WEB_DRIVER_HEADLESS = "WEB_DRIVER_HEADLESS";
+	private static final String LOGIN_FORM_AFTER_DELAY_SEC = "LOGIN_FORM_AFTER_DELAY_SEC";
+	private static final String CAPTCHA_DELAY_SEC = "CAPTCHA_DELAY_SEC";
+
 	private String code = null;
 	private int numberOfAttempts;
 	private boolean success;
 	private String chromeDriverBinaryPath;
 	private static final int ATTEMPT_TIMEOUT = 7000;
 	private boolean headless;
+	private int loginFormAfterDelaySec;
+	private int captchaDelaySec;
 
-	public SeleniumTokenLoader(ClientIdentity identity, int numberOfAttempts, String chromeDriverBinaryPath, VariablesService variablesService) {
+	public SeleniumTokenLoader(ClientIdentity identity,
+							   int numberOfAttempts,
+							   String chromeDriverBinaryPath,
+							   VariablesService variablesService) {
 		this.identity = identity;
 		this.numberOfAttempts = numberOfAttempts;
 		this.chromeDriverBinaryPath = chromeDriverBinaryPath;
 		this.headless = variablesService.getBoolean(WEB_DRIVER_HEADLESS, true);
+		this.loginFormAfterDelaySec = variablesService.getInt(LOGIN_FORM_AFTER_DELAY_SEC, 2);
+		this.captchaDelaySec = variablesService.getInt(CAPTCHA_DELAY_SEC, 0);
 	}
 	
 	@Override
@@ -278,9 +288,10 @@ public class SeleniumTokenLoader implements TokenLoader {
 
 		WebElement sendButton = driver.findElement(new By.ByXPath("//button[@data-qa='account-login-submit']"));
 		logger.info("Submit form for token");
+		delaySec(captchaDelaySec);
 
 		sendButton.submit();
-		delaySec(2);
+		delaySec(loginFormAfterDelaySec);
 
 		logger.info("Stopping selenium... Server's answer with generated token expected in callback.");
 		driver.close(); // close selenium window
